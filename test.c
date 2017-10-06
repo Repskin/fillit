@@ -6,15 +6,17 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/02 10:10:08 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/06 11:04:43 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-int	check_1(char *str, int size)
+/* Pour verifier que la piece lue a bien le bon nombre et les bon caracteres */
+int		check_1(char *str, int size)
 {
 	int i;
 	int p;
@@ -42,7 +44,8 @@ int	check_1(char *str, int size)
 	return (0);
 }
 
-int	check_2(char *str)
+/* Pour verifier que la piece lue a bien 6 ou 8 connecitons */
+int		check_2(char *str)
 {
 	int i;
 	int connection;
@@ -69,30 +72,88 @@ int	check_2(char *str)
 	return (0);
 }
 
-int	main(int argc, char **argv)
+
+/* Pour initialiser le tableau de pieces à 0 */
+void	initialiser_tableau(int tab[][4])
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < 26)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			tab[i][j] = 0;
+			j++;
+		}
+		i++;
+	}
+}
+
+/* Pour stocker chaque piece lu dans le tableau */
+void	stock_piece(int tab[][4], int index, char *buf)
+{
+	int i;
+	int j;
+	int k;
+
+	i = 0;
+	j = 0;
+	k = 1;
+	while (i < 19)
+	{
+		if (buf[i] == '#')
+		{
+			tab[index][j] = k;
+			j++;
+		}
+		if (!(buf[i] == '\n'))
+			k++;
+		i++;
+	}
+}
+
+int		main(int argc, char **argv)
 {
 	int		fd;
 	int		size_read;
 	char	buf[22];
 	int		error;
+	int		tab_pieces[26][4];
+	int		nb_tetriminos;
 
 	size_read = 1;
+	nb_tetriminos = 0;
 	if (argc != 2)
 		return (1);
 	if ((fd = open(argv[1], O_RDONLY)) < 0)
 		return (2);
+	//tab_pieces = initialise_tab_pieces();
+	initialiser_tableau(tab_pieces);
 	while (size_read > 0)
 	{
 		size_read = read(fd, buf, 21);
-		printf("%d\n", size_read);
-		if ((error = check_1(buf, size_read)) || (error = check_2(buf)))
+		//printf("%d\n", size_read);
+		if ((error = check_1(buf, size_read)) || (error = check_2(buf)) || nb_tetriminos > 26)
 		{
-			printf("\nFailed : %d\n", error);
+			//printf("\nFailed : %d\n", error);
 			close(fd);
 			return (1);
 		}
+		if (size_read > 19)
+			stock_piece(tab_pieces, nb_tetriminos, buf);
+		nb_tetriminos++;
 	}
-	printf("OK pour les tests !\n");
+	/*for (int i = 0; i < 26; i++)
+	{
+		for (int j = 0; j < 4; j++) {
+			printf("%d - ", tab_pieces[i][j]);
+		}
+		printf("\n");
+	}*/
+	//printf("OK pour les tests !\n");
 	close(fd);
 	return (0);
 }
