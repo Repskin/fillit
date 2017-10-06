@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/06 11:04:43 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/06 11:12:29 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Pour verifier que la piece lue a bien le bon nombre et les bon caracteres */
+/*
+** Pour verifier que la piece lue a bien le bon nombre et les bon caracteres
+*/
 int		check_1(char *str, int size)
 {
 	int i;
@@ -44,7 +46,9 @@ int		check_1(char *str, int size)
 	return (0);
 }
 
-/* Pour verifier que la piece lue a bien 6 ou 8 connecitons */
+/*
+** Pour verifier que la piece lue a bien 6 ou 8 connecitons
+*/
 int		check_2(char *str)
 {
 	int i;
@@ -72,8 +76,9 @@ int		check_2(char *str)
 	return (0);
 }
 
-
-/* Pour initialiser le tableau de pieces à 0 */
+/*
+** Pour initialiser le tableau de pieces à 0
+*/
 void	initialiser_tableau(int tab[][4])
 {
 	int i;
@@ -92,7 +97,9 @@ void	initialiser_tableau(int tab[][4])
 	}
 }
 
-/* Pour stocker chaque piece lu dans le tableau */
+/*
+** Pour stocker chaque piece lue dans le tableau
+*/
 void	stock_piece(int tab[][4], int index, char *buf)
 {
 	int i;
