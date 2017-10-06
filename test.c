@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/06 15:45:52 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/06 16:30:02 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,7 @@ int		main(int argc, char **argv)
 	int		error;
 	int		tab_pieces[26][4];
 	int		nb_tetriminos;
+	int		size_read_temp;
 
 	size_read = 1;
 	nb_tetriminos = 0;
@@ -210,6 +211,7 @@ int		main(int argc, char **argv)
 	initialiser_tableau(tab_pieces);
 	while (size_read > 0)
 	{
+		size_read_temp = size_read;
 		size_read = read(fd, buf, 21);
 		//printf("%d\n", size_read);
 		if ((error = check_1(buf, size_read)) || (error = check_2(buf)) || nb_tetriminos > 26)
@@ -230,6 +232,8 @@ int		main(int argc, char **argv)
 		printf("\n");
 	}*/
 	close(fd);
+	if (size_read_temp == 21)
+		return (8);
 	fillit(tab_pieces);
 	return (0);
 }
