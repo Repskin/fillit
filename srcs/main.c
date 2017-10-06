@@ -28,21 +28,20 @@ int     main(int argc, char **argv)
     int     fd;
     int     size_read;
     char    buf[22];
-    int     error;
     int     array_pieces[26][4];
     int     nb_tetriminos;
     
     size_read = 1;
     nb_tetriminos = 0;
-    if (argc != 2)
+    if (argc != 2) // If there is more or less than 1 argument
         return (0);
-    if ((fd = open(argv[1], O_RDONLY)) < 0)
+    if ((fd = open(argv[1], O_RDONLY)) < 0) // If the file can't be open
         return (0);
-    init_shape_array(array_pieces);
-    while (size_read > 0)
+    init_shape_array(array_pieces); // Initialize the int array
+    while (size_read > 0) // Read the file
     {
         size_read = read(fd, buf, 21);
-        if (!(error = check_grid(buf, size_read)) || !(error = check_shape(buf)) || nb_tetriminos > 26)
+        if (!check_grid(buf, size_read) || !check_shape(buf) || nb_tetriminos > 26)
         {
             close(fd);
             return (0);
