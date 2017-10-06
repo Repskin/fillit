@@ -18,7 +18,8 @@ HEADER = includes/
 SRC_DIR = srcs/
 OBJ_DIR = objs/
 
-FILES = read_file.c
+FILES = main.c \
+        read_file.c
 OBJ = $(addprefix $(OBJ_DIR),$(FILES:.c=.o))
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 
