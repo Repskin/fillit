@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/06 11:12:29 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/06 11:38:58 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ int		main(int argc, char **argv)
 		return (1);
 	if ((fd = open(argv[1], O_RDONLY)) < 0)
 		return (2);
-	//tab_pieces = initialise_tab_pieces();
 	initialiser_tableau(tab_pieces);
 	while (size_read > 0)
 	{
@@ -160,7 +159,6 @@ int		main(int argc, char **argv)
 		}
 		printf("\n");
 	}*/
-	//printf("OK pour les tests !\n");
 	close(fd);
 	return (0);
 }
