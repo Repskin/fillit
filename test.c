@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/06 11:38:58 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/06 15:45:52 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,22 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+void ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void ft_putstr(char *str) {
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		ft_putchar(str[i]);
+		i++;
+	}
+}
 
 /*
 ** Pour verifier que la piece lue a bien le bon nombre et les bon caracteres
@@ -122,6 +138,60 @@ void	stock_piece(int tab[][4], int index, char *buf)
 	}
 }
 
+/*
+** Pour afficher a l'ecran la solution finale
+*/
+void	print_soluce(char *tab_soluce, int index)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (i < index)
+	{
+		j = 0;
+		while (j < index)
+		{
+			ft_putchar(*tab_soluce);
+			tab_soluce++;
+			j++;
+		}
+		ft_putchar('\n');
+		i++;
+	}
+}
+
+void	fillit(int tab_pieces[][4])
+{
+	// TEST
+	int i;
+	int j;
+	int index;
+
+	i = 0;
+	j = 0;
+	index = 10;
+	tab_pieces[0][0] = 2;
+	char tab_solution[index][index];
+
+	while (i < index)
+	{
+		j = 0;
+		while (j < index)
+		{
+			if (j == 0)
+				tab_solution[i][j] = 'A';
+			else
+				tab_solution[i][j] = '.';
+			j++;
+		}
+		i++;
+	}
+	// FIN TEST
+	print_soluce((char *)tab_solution, index);
+}
+
 int		main(int argc, char **argv)
 {
 	int		fd;
@@ -160,5 +230,6 @@ int		main(int argc, char **argv)
 		printf("\n");
 	}*/
 	close(fd);
+	fillit(tab_pieces);
 	return (0);
 }
