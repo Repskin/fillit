@@ -2,11 +2,12 @@
 
 Look at **subject.pdf** to see what this program is about.
 
-## Compiling 
+## Compiling
 
 Run `make`, a file `fillit` is now in your directory.
 
 ## Usage
 
 After compiling, use
+
 `./fillit <file>`
