@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/08 11:39:19 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/08 15:28:59 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,53 @@ char	**initiliser_soluce(int index)
 	return (y);
 }
 
+int		placer_point(int id, char **tab_soluce, char nom)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (tab_soluce[i][j] != '.' && i < index)
+	{
+		j = 0;
+		while (tab_soluce[i][j] != '.' && j < index)
+		{
+
+			j++;
+		}
+		i++;
+	}
+
+}
+
+int		placer_piece(int tab_pieces[][4], char **tab_soluce, int index)
+{
+	int i;
+	int j;
+	int x;
+	int y;
+	char nom;
+
+	i = 0;
+	x = 0;
+	y = 0;
+	nom = 'A';
+	while (tab_pieces[i][0] != 0)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			if (!(placer_point(tab_pieces[i][j], tab_soluce, nom, index)))
+				return (0);
+			j++;
+		}
+		nom++;
+		i++;
+	}
+
+	return (1);
+}
+
 /*
 ** Function qui se charge d'appeler les autres fonctions :
 ** creer un nouveau tableau, essayer de le remplir, l'afficher a l'ecran.
@@ -212,22 +259,17 @@ void	fillit(int tab_pieces[][4])
 	int index;
 	char **tab_soluce;
 	unsigned char boolean;
-	char nom_tetriminos;
-	int i;
-	int j;
 
 	index = 3;
 	boolean = 0;
-	nom_tetriminos = 'A';
-	i = 0;
-	j = 0;
+
 	while (!boolean)
 	{
 		tab_soluce = initiliser_soluce(index);
-
-		if (tab_pieces[i][0] == 0)
+		if (!placer_piece(tab_pieces, tab_soluce, index, nom_tetriminos))
+			index++;
+		else
 			boolean = 1;
-		index++;
 	}
 
 	print_soluce(tab_soluce, index);
