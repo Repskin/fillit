@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/06 16:30:02 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/08 11:39:19 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <stdio.h>
+
+
 void ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
 
-void ft_putstr(char *str) {
+/*void ft_putstr(char *str) {
 	int i;
 
 	i = 0;
@@ -29,7 +32,8 @@ void ft_putstr(char *str) {
 		ft_putchar(str[i]);
 		i++;
 	}
-}
+}*/
+
 
 /*
 ** Pour verifier que la piece lue a bien le bon nombre et les bon caracteres
@@ -62,6 +66,7 @@ int		check_1(char *str, int size)
 	return (0);
 }
 
+
 /*
 ** Pour verifier que la piece lue a bien 6 ou 8 connecitons
 */
@@ -92,6 +97,7 @@ int		check_2(char *str)
 	return (0);
 }
 
+
 /*
 ** Pour initialiser le tableau de pieces à 0
 */
@@ -112,6 +118,7 @@ void	initialiser_tableau(int tab[][4])
 		i++;
 	}
 }
+
 
 /*
 ** Pour stocker chaque piece lue dans le tableau
@@ -138,10 +145,11 @@ void	stock_piece(int tab[][4], int index, char *buf)
 	}
 }
 
+
 /*
 ** Pour afficher a l'ecran la solution finale
 */
-void	print_soluce(char *tab_soluce, int index)
+void	print_soluce(char **tab_soluce, int index)
 {
 	int i;
 	int j;
@@ -153,8 +161,8 @@ void	print_soluce(char *tab_soluce, int index)
 		j = 0;
 		while (j < index)
 		{
-			ft_putchar(*tab_soluce);
-			tab_soluce++;
+			ft_putchar(tab_soluce[i][j]);
+			//tab_soluce++;
 			j++;
 		}
 		ft_putchar('\n');
@@ -162,35 +170,69 @@ void	print_soluce(char *tab_soluce, int index)
 	}
 }
 
-void	fillit(int tab_pieces[][4])
+
+/*
+** Pour initialiser un tableau de solution de taille index avec des points partout
+*/
+char	**initiliser_soluce(int index)
 {
-	// TEST
 	int i;
 	int j;
-	int index;
+	char **y;
 
 	i = 0;
-	j = 0;
-	index = 10;
-	tab_pieces[0][0] = 2;
-	char tab_solution[index][index];
+	y = malloc(sizeof(char *) * index);
 
+	while(i < index)
+	{
+		y[i] = malloc(sizeof(char) * index);
+		i++;
+	}
+
+	i = 0;
 	while (i < index)
 	{
 		j = 0;
 		while (j < index)
 		{
-			if (j == 0)
-				tab_solution[i][j] = 'A';
-			else
-				tab_solution[i][j] = '.';
+			y[i][j] = '.';
 			j++;
 		}
 		i++;
 	}
-	// FIN TEST
-	print_soluce((char *)tab_solution, index);
+	return (y);
 }
+
+/*
+** Function qui se charge d'appeler les autres fonctions :
+** creer un nouveau tableau, essayer de le remplir, l'afficher a l'ecran.
+*/
+void	fillit(int tab_pieces[][4])
+{
+	int index;
+	char **tab_soluce;
+	unsigned char boolean;
+	char nom_tetriminos;
+	int i;
+	int j;
+
+	index = 3;
+	boolean = 0;
+	nom_tetriminos = 'A';
+	i = 0;
+	j = 0;
+	while (!boolean)
+	{
+		tab_soluce = initiliser_soluce(index);
+
+		if (tab_pieces[i][0] == 0)
+			boolean = 1;
+		index++;
+	}
+
+	print_soluce(tab_soluce, index);
+}
+
 
 int		main(int argc, char **argv)
 {
