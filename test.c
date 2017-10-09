@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/08 15:28:59 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/09 15:19:01 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <stdio.h>
-
-
-void ft_putchar(char c)
+void	ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
-
-/*void ft_putstr(char *str) {
-	int i;
-
-	i = 0;
-	while (str[i])
-	{
-		ft_putchar(str[i]);
-		i++;
-	}
-}*/
-
 
 /*
 ** Pour verifier que la piece lue a bien le bon nombre et les bon caracteres
@@ -66,7 +51,6 @@ int		check_1(char *str, int size)
 	return (0);
 }
 
-
 /*
 ** Pour verifier que la piece lue a bien 6 ou 8 connecitons
 */
@@ -97,7 +81,6 @@ int		check_2(char *str)
 	return (0);
 }
 
-
 /*
 ** Pour initialiser le tableau de pieces à 0
 */
@@ -118,7 +101,6 @@ void	initialiser_tableau(int tab[][4])
 		i++;
 	}
 }
-
 
 /*
 ** Pour stocker chaque piece lue dans le tableau
@@ -145,7 +127,6 @@ void	stock_piece(int tab[][4], int index, char *buf)
 	}
 }
 
-
 /*
 ** Pour afficher a l'ecran la solution finale
 */
@@ -169,7 +150,6 @@ void	print_soluce(char **tab_soluce, int index)
 		i++;
 	}
 }
-
 
 /*
 ** Pour initialiser un tableau de solution de taille index avec des points partout
@@ -203,50 +183,92 @@ char	**initiliser_soluce(int index)
 	return (y);
 }
 
-int		placer_point(int id, char **tab_soluce, char nom)
+int		get_coordonnees(char **tab_soluce, int index)
 {
 	int i;
 	int j;
 
 	i = 0;
-	while (tab_soluce[i][j] != '.' && i < index)
+	j = 0;
+
+	while (i < index && tab_soluce[i][j] != '.')
 	{
 		j = 0;
-		while (tab_soluce[i][j] != '.' && j < index)
+		while (j < index && tab_soluce[i][j] != '.')
 		{
-
 			j++;
 		}
-		i++;
+		if (j >= index)
+		{
+		  i++;
+		  j = 0;
+		}
 	}
+	if (i >= index)
+		return (-1);
+	i += 1;
+	j += 1;
+	return (i * j);
+}
 
+int		get_position(int id, int previous, char **tab_soluce, int index)
+{
+	int pos;
+
+	pos = get_coordonnees(tab_soluce, index) + (id - previous);
+}
+
+int		placer_point(int id, int previous, char **tab_soluce, char nom, int index)
+{
+	int i;
+	int j;
+	int coordonnees;
+
+	i = 0;
+	j = 0;
+	id = 0;
+	if (previous == 0)
+	{
+		coordonnees = get_coordonnees(tab_soluce, index);
+		if (coordonnees == -1)
+			return (0);
+
+		tab_soluce[coordonnees / index][coordonnees % index] = nom;
+	}
+	else
+	{
+		coordonnees = get_position(id, previous, tab_soluce, index);
+		if (coordonnees == -1)
+			return (0);
+		tab_soluce[coordonnees / index][coordonnees % index] = nom;
+	}
+	return (1);
 }
 
 int		placer_piece(int tab_pieces[][4], char **tab_soluce, int index)
 {
 	int i;
 	int j;
-	int x;
-	int y;
 	char nom;
+	int previous;
 
 	i = 0;
-	x = 0;
-	y = 0;
 	nom = 'A';
+	previous = 0;
 	while (tab_pieces[i][0] != 0)
 	{
 		j = 0;
 		while (j < 4)
 		{
-			if (!(placer_point(tab_pieces[i][j], tab_soluce, nom, index)))
+			if (!(placer_point(tab_pieces[i][j], previous, tab_soluce, nom, index)))
 				return (0);
+			previous = tab_pieces[i][j];
 			j++;
 		}
 		nom++;
 		i++;
+		previous = 0;
 	}
-
 	return (1);
 }
 
@@ -266,15 +288,13 @@ void	fillit(int tab_pieces[][4])
 	while (!boolean)
 	{
 		tab_soluce = initiliser_soluce(index);
-		if (!placer_piece(tab_pieces, tab_soluce, index, nom_tetriminos))
+		if (!placer_piece(tab_pieces, tab_soluce, index))
 			index++;
 		else
 			boolean = 1;
 	}
-
 	print_soluce(tab_soluce, index);
 }
-
 
 int		main(int argc, char **argv)
 {
