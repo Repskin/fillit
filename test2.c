@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   test2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/02 09:56:37 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/09 16:28:02 by afelpin          ###   ########.fr       */
+/*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
+/*   Updated: 2017/10/09 18:08:33 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,24 +105,26 @@ void	initialiser_tableau(int tab[][4])
 /*
 ** Pour stocker chaque piece lue dans le tableau
 */
-void	stock_piece(int tab[][4], int index, char *buf)
+void	stock_piece(int tab[][6], int index, char *buf)
 {
 	int i;
 	int j;
-	int k;
+	int nb_diese;
+	int pos_temp;
 
 	i = 0;
 	j = 0;
-	k = 1;
-	while (i < 19)
+	nb_diese = 0;
+	pos_temp = 0;
+	while (nb_diese < 4)
 	{
 		if (buf[i] == '#')
 		{
-			tab[index][j] = k;
-			j++;
+			tab[index][j++] = (i - pos_temp) / 5;
+			tab[index][j++] = (i - pos_temp) % 5;
+			nb_diese++;
 		}
-		if (!(buf[i] == '\n'))
-			k++;
+		pos_temp = i;
 		i++;
 	}
 }
@@ -182,100 +184,13 @@ char	**initiliser_soluce(int index)
 	return (y);
 }
 
-int		get_coordonnees(char **tab_soluce, int index)
-{
-	int i;
-	int j;
 
-	i = 0;
-	j = 0;
-
-	while (i < index && tab_soluce[i][j] != '.')
-	{
-		j = 0;
-		while (j < index && tab_soluce[i][j] != '.')
-		{
-			j++;
-		}
-		if (j >= index)
-		{
-		  i++;
-		  j = 0;
-		}
-	}
-	if (i >= index)
-		return (-1);
-	i += 1;
-	j += 1;
-	return (i * j);
-}
-
-int		get_position(int id, int previous, char **tab_soluce, int index)
-{
-	int pos;
-
-	pos = get_coordonnees(tab_soluce, index) + (id - previous);
-}
-
-int		placer_point(int id, int previous, char **tab_soluce, char nom, int index)
-{
-	int i;
-	int j;
-	int coordonnees;
-
-	i = 0;
-	j = 0;
-	id = 0;
-	if (previous == 0)
-	{
-		coordonnees = get_coordonnees(tab_soluce, index);
-		if (coordonnees == -1)
-			return (0);
-
-		tab_soluce[coordonnees / index][coordonnees % index] = nom;
-	}
-	else
-	{
-		coordonnees = get_position(id, previous, tab_soluce, index);
-		if (coordonnees == -1)
-			return (0);
-		tab_soluce[coordonnees / index][coordonnees % index] = nom;
-	}
-	return (1);
-}
-
-int		placer_piece(int tab_pieces[][4], char **tab_soluce, int index)
-{
-	int i;
-	int j;
-	char nom;
-	int previous;
-
-	i = 0;
-	nom = 'A';
-	previous = 0;
-	while (tab_pieces[i][0] != 0)
-	{
-		j = 0;
-		while (j < 4)
-		{
-			if (!(placer_point(tab_pieces[i][j], previous, tab_soluce, nom, index)))
-				return (0);
-			previous = tab_pieces[i][j];
-			j++;
-		}
-		nom++;
-		i++;
-		previous = 0;
-	}
-	return (1);
-}
 
 /*
 ** Function qui se charge d'appeler les autres fonctions :
 ** creer un nouveau tableau, essayer de le remplir, l'afficher a l'ecran.
 */
-void	fillit(int tab_pieces[][4])
+void	fillit(int tab_pieces[][6])
 {
 	int index;
 	char **tab_soluce;
@@ -284,13 +199,12 @@ void	fillit(int tab_pieces[][4])
 	index = 3;
 	boolean = 0;
 
+	tab_pieces[0][0] = 0; // A SUPPRIMER !
+
 	while (!boolean)
 	{
 		tab_soluce = initiliser_soluce(index);
-		if (!placer_piece(tab_pieces, tab_soluce, index))
-			index++;
-		else
-			boolean = 1;
+		boolean = 1;
 	}
 	print_soluce(tab_soluce, index);
 }
@@ -301,7 +215,7 @@ int		main(int argc, char **argv)
 	int		size_read;
 	char	buf[22];
 	int		error;
-	int		tab_pieces[26][4];
+	int		tab_pieces[26][6];
 	int		nb_tetriminos;
 	int		size_read_temp;
 
