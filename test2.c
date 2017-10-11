@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/09 18:08:33 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/10 18:04:08 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 void	ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
 
-/*
-** Pour verifier que la piece lue a bien le bon nombre et les bon caracteres
-*/
+
 int		check_1(char *str, int size)
 {
 	int i;
@@ -51,9 +50,7 @@ int		check_1(char *str, int size)
 	return (0);
 }
 
-/*
-** Pour verifier que la piece lue a bien 6 ou 8 connecitons
-*/
+
 int		check_2(char *str)
 {
 	int i;
@@ -81,57 +78,66 @@ int		check_2(char *str)
 	return (0);
 }
 
-/*
-** Pour initialiser le tableau de pieces à 0
-*/
-void	initialiser_tableau(int tab[][4])
+
+char	**initialiser(int index, int index2, char c)
 {
 	int i;
 	int j;
+	char **y;
 
 	i = 0;
-	while (i < 26)
+	y = malloc(sizeof(char *) * index);
+
+	while(i < index)
+	{
+		y[i] = malloc(sizeof(char) * index2);
+		i++;
+	}
+
+	i = 0;
+	while (i < index)
 	{
 		j = 0;
-		while (j < 4)
+		while (j < index2)
 		{
-			tab[i][j] = 0;
+			y[i][j] = c;
 			j++;
 		}
 		i++;
 	}
+	return (y);
 }
 
-/*
-** Pour stocker chaque piece lue dans le tableau
-*/
-void	stock_piece(int tab[][6], int index, char *buf)
+
+char	**stock_piece(char *str, int nb_tetriminos)
 {
-	int i;
+	char **tab_pieces;
+	char buf[(nb_tetriminos + 1) * 21];
+	int	i;
 	int j;
-	int nb_diese;
-	int pos_temp;
+	int pos_tab;
+	int fd;
 
+	fd = open(str, O_RDONLY);
 	i = 0;
-	j = 0;
-	nb_diese = 0;
-	pos_temp = 0;
-	while (nb_diese < 4)
+	pos_tab = 0;
+	tab_pieces = initialiser(nb_tetriminos+1, 21, '0');
+	read(fd, buf, nb_tetriminos * 21 - 1);
+	while (pos_tab < nb_tetriminos)
 	{
-		if (buf[i] == '#')
+		j = 0;
+		while (j <= 20)
 		{
-			tab[index][j++] = (i - pos_temp) / 5;
-			tab[index][j++] = (i - pos_temp) % 5;
-			nb_diese++;
+			tab_pieces[pos_tab][j] = buf[i];
+			j++;
+			i++;
 		}
-		pos_temp = i;
-		i++;
+		pos_tab++;
 	}
+	return (tab_pieces);
 }
 
-/*
-** Pour afficher a l'ecran la solution finale
-*/
+
 void	print_soluce(char **tab_soluce, int index)
 {
 	int i;
@@ -152,45 +158,53 @@ void	print_soluce(char **tab_soluce, int index)
 	}
 }
 
-/*
-** Pour initialiser un tableau de solution de taille index avec des points partout
-*/
-char	**initiliser_soluce(int index)
+
+int		placer_point(char **tab_soluce, char c, int x, int y)
 {
-	int i;
-	int j;
-	char **y;
-
-	i = 0;
-	y = malloc(sizeof(char *) * index);
-
-	while(i < index)
-	{
-		y[i] = malloc(sizeof(char) * index);
-		i++;
-	}
-
-	i = 0;
-	while (i < index)
-	{
-		j = 0;
-		while (j < index)
-		{
-			y[i][j] = '.';
-			j++;
-		}
-		i++;
-	}
-	return (y);
+	if (tab_soluce[x][y] != '.')
+		return (0);
+	tab_soluce[x][y] = c;
+	return (1);
 }
 
 
+int		placer_piece(char **tab_soluce, char *piece, int taille_soluce, int pos, char c)
+{
+	int point_placer;
 
-/*
-** Function qui se charge d'appeler les autres fonctions :
-** creer un nouveau tableau, essayer de le remplir, l'afficher a l'ecran.
-*/
-void	fillit(int tab_pieces[][6])
+	point_placer = 0;
+	while (point_placer != 4)
+	{
+		if (!placer_point(tab_soluce, c, pos / taille_soluce, pos % taille_soluce))
+			return (0);
+		pos++;
+		point_placer++;
+	}
+	piece = NULL;
+	return (1);
+}
+
+
+int		placer_pieces(char **tab_soluce, char **tab_pieces, int index)
+{
+	int i;
+	char c;
+
+	i = 0;
+	c = 'A';
+
+	while (tab_pieces[i][0] != '0')
+	{
+		if (!placer_piece(tab_soluce, tab_pieces[i], index, 0, c))
+			return (0);
+		i++;
+		c++;
+	}
+	return (1);
+}
+
+
+void	fillit(char **tab_pieces)
 {
 	int index;
 	char **tab_soluce;
@@ -199,49 +213,44 @@ void	fillit(int tab_pieces[][6])
 	index = 3;
 	boolean = 0;
 
-	tab_pieces[0][0] = 0; // A SUPPRIMER !
-
 	while (!boolean)
 	{
-		tab_soluce = initiliser_soluce(index);
-		boolean = 1;
+		tab_soluce = initialiser(index, index, '.');
+		if (!placer_pieces(tab_soluce, tab_pieces, index))
+			index++;
+		else
+			boolean = 1;
 	}
 	print_soluce(tab_soluce, index);
 }
+
 
 int		main(int argc, char **argv)
 {
 	int		fd;
 	int		size_read;
 	char	buf[22];
-	int		error;
-	int		tab_pieces[26][6];
 	int		nb_tetriminos;
 	int		size_read_temp;
 
 	size_read = 1;
 	nb_tetriminos = 0;
-	if (argc != 2)
-		return (1);
-	if ((fd = open(argv[1], O_RDONLY)) < 0)
+	if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
 		return (2);
-	initialiser_tableau(tab_pieces);
 	while (size_read > 0)
 	{
 		size_read_temp = size_read;
 		size_read = read(fd, buf, 21);
-		if ((error = check_1(buf, size_read)) || (error = check_2(buf)) || nb_tetriminos > 26)
+		if ((check_1(buf, size_read)) || (check_2(buf)) || nb_tetriminos > 26)
 		{
 			close(fd);
 			return (1);
 		}
-		if (size_read > 19)
-			stock_piece(tab_pieces, nb_tetriminos, buf);
 		nb_tetriminos++;
 	}
-	close(fd);
 	if (size_read_temp == 21)
 		return (8);
-	fillit(tab_pieces);
+	fillit(stock_piece(argv[1], nb_tetriminos-1));
+	close(fd);
 	return (0);
 }
