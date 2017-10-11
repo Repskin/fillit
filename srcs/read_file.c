@@ -125,7 +125,7 @@ void    init_shape_array(int shape_array[][4])
  Return nothing
  
  Params :
- int tab[][4]   = an initialize int array with 0
+ int tab[][4]   = an initialized int array with 0
  int index      = the number of the piece
  char *buf      = the string who contains the piece
  
