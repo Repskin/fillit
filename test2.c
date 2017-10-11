@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/10 18:04:08 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/10 18:25:32 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,16 +170,7 @@ int		placer_point(char **tab_soluce, char c, int x, int y)
 
 int		placer_piece(char **tab_soluce, char *piece, int taille_soluce, int pos, char c)
 {
-	int point_placer;
-
-	point_placer = 0;
-	while (point_placer != 4)
-	{
-		if (!placer_point(tab_soluce, c, pos / taille_soluce, pos % taille_soluce))
-			return (0);
-		pos++;
-		point_placer++;
-	}
+	placer_point(tab_soluce, c, pos / taille_soluce, pos % taille_soluce);
 	piece = NULL;
 	return (1);
 }
