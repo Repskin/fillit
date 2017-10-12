@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/11 11:56:41 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/12 10:08:46 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,25 @@ char	**initialiser(int index, int index2, char c)
 	return (y);
 }
 
+char	**reinitialiser(char **tab, int index, int index2, char c)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < index)
+	{
+		j = 0;
+		while (j < index2)
+		{
+			tab[i][j] = c;
+			j++;
+		}
+		i++;
+	}
+	return (tab);
+}
+
 
 char	**stock_piece(char *str, int nb_tetriminos)
 {
@@ -158,15 +177,67 @@ void	print_soluce(char **tab_soluce, int index)
 	}
 }
 
-
-int		placer_point(char **tab_soluce, char c, int x, int y)
+int		tester_point(char **tab_soluce, int x, int y, int taille_soluce)
 {
-	if (tab_soluce[x][y] != '.')
+	if (!(x < taille_soluce) || !(y < taille_soluce) || tab_soluce[x][y] != '.')
+		return (0);
+	return (1);
+}
+
+int		placer_point(char **tab_soluce, char c, int x, int y, int taille_soluce)
+{
+	if (!(x < taille_soluce) || !(y < taille_soluce) || tab_soluce[x][y] != '.')
 		return (0);
 	tab_soluce[x][y] = c;
 	return (1);
 }
 
+
+int		tester_piece(char **tab_soluce, char *piece, int taille_soluce, int x, int y)
+{
+	int i;
+	int j;
+	int nb_diese;
+	int decallage_y;
+	int temp_dec_y;
+	int temp_i;
+
+	i = 0;
+	j = 0;
+	decallage_y = 0;
+	temp_dec_y = 0;
+	nb_diese = 0;
+	temp_i = 0;
+	while (nb_diese < 4)
+	{
+		while (piece[i] != '#')
+		{
+			if (piece[i] == '\n')
+			{
+				if (nb_diese > 0)
+					x++;
+				decallage_y = -1;
+			}
+			else
+				decallage_y++;
+			i++;
+		}
+		if (i - temp_i >= 1)
+			decallage_y++;
+		if (nb_diese > 0 && decallage_y > temp_dec_y)
+			y++;
+		else if (nb_diese > 0 && decallage_y < temp_dec_y)
+			y--;
+		temp_dec_y = decallage_y;
+		temp_i = i;
+		i++;
+		//printf("i : %d, temp_i : %d, x : %d, y : %d, decallage_y : %d, temp_dec_y : %d\n", i, temp_i, x, y, decallage_y, temp_dec_y);
+		if (!tester_point(tab_soluce, x, y, taille_soluce))
+			return (0);
+		nb_diese++;
+	}
+	return (1);
+}
 
 int		placer_piece(char **tab_soluce, char *piece, int taille_soluce, int x, int y, char c)
 {
@@ -183,7 +254,6 @@ int		placer_piece(char **tab_soluce, char *piece, int taille_soluce, int x, int 
 	temp_dec_y = 0;
 	nb_diese = 0;
 	temp_i = 0;
-	taille_soluce = 0; //A SUPPRIMER !!
 	while (nb_diese < 4)
 	{
 		while (piece[i] != '#')
@@ -192,7 +262,7 @@ int		placer_piece(char **tab_soluce, char *piece, int taille_soluce, int x, int 
 			{
 				if (nb_diese > 0)
 					x++;
-				decallage_y = 0;
+				decallage_y = -1;
 			}
 			else
 				decallage_y++;
@@ -207,30 +277,49 @@ int		placer_piece(char **tab_soluce, char *piece, int taille_soluce, int x, int 
 		temp_dec_y = decallage_y;
 		temp_i = i;
 		i++;
-		printf("i : %d, temp_i : %d, x : %d, y : %d, decallage_y : %d, temp_dec_y : %d\n", i, temp_i, x, y, decallage_y, temp_dec_y);
-		placer_point(tab_soluce, c, x, y);
+		//printf("i : %d, temp_i : %d, x : %d, y : %d, decallage_y : %d, temp_dec_y : %d\n", i, temp_i, x, y, decallage_y, temp_dec_y);
+		if (!placer_point(tab_soluce, c, x, y, taille_soluce))
+			return (0);
 		nb_diese++;
 	}
 	return (1);
 }
 
-
 int		placer_pieces(char **tab_soluce, char **tab_pieces, int index)
 {
 	int i;
 	char c;
+	int x;
+	int y;
 
 	i = 0;
 	c = 'A';
+	x = 0;
+	y = 0;
 
-	while (tab_pieces[i][0] != '0')
+	while (tab_pieces[i][0] != '0' && x < index && y < index)
 	{
-		if (!placer_piece(tab_soluce, tab_pieces[i], index, 0, 0, c))
-			return (0);
-		i++;
-		c++;
+		if (!tester_piece(tab_soluce, tab_pieces[i], index, x, y))
+		{
+			//tab_soluce = reinitialiser(tab_soluce, index, index, '.');
+			if (y+1 < index)
+				y++;
+			else
+			{
+				x++;
+				y = 0;
+			}
+		}
+		else
+		{
+			placer_piece(tab_soluce, tab_pieces[i], index, x, y, c);
+			i++;
+			c++;
+		}
 	}
-	return (1);
+	if (tab_pieces[i][0] == '0')
+		return (1);
+	return (0);
 }
 
 
@@ -240,7 +329,7 @@ void	fillit(char **tab_pieces)
 	char **tab_soluce;
 	unsigned char boolean;
 
-	index = 3;
+	index = 2;
 	boolean = 0;
 
 	while (!boolean)
