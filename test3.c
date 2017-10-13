@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/12 15:16:30 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/12 18:19:12 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,7 +314,6 @@ int		placer_pieces(char **tab_soluce, char **tab_pieces, int index)
 	c = 'A';
 	x = 0;
 	y = 0;
-
 	while (tab_pieces[i][0] != '0' && x < index && y < index)
 	{
 		if (!tester_piece(tab_soluce, tab_pieces[i], index, x, y, c))
@@ -329,7 +328,6 @@ int		placer_pieces(char **tab_soluce, char **tab_pieces, int index)
 		}
 		else
 		{
-			//placer_piece(tab_soluce, tab_pieces[i], index, x, y, c);
 			i++;
 			c++;
 		}
