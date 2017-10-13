@@ -1,6 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+char    **initialize_result_array(int width)
+{
+    int     i;
+    int     j;
+    char    **array_result;
+    
+    i = 0;
+    j = 0;
+    array_result = malloc(sizeof(char*) * width);
+    while (i < width)
+    {
+        array_result[i] = malloc(sizeof(char) * (width + 1));
+        i++;
+    }
+    i = 0;
+    while (i < width)
+    {
+        while (j < (width + 1))
+        {
+            array_result[i][j] = '.';
+            j++;
+        }
+        array_result[i][j-1] = '\n';
+        j = 0;
+        i++;
+    }
+    return (array_result);
+}
+
 int     put_piece(char **array_result, int array_pieces[][4], int index, int x, int y, int piece, char c)
 {
     int result;
@@ -37,10 +66,10 @@ void    print_tab(char **result)
     int j;
     i = 0;
     j = 0;
-    printf("|x|0|1|2|3|\n|");
-    while (result[i] && result[i+1])
+    printf("|x|0|1|2|3|\n");
+    while (result[i])
     {
-        printf("%d", i);
+        printf("|%d", i);
         while (result[i][j])
         {
             printf("|%c", result[i][j]);
@@ -54,26 +83,41 @@ void    print_tab(char **result)
 int     main(void)
 {
     char    **result;
-    result = malloc(sizeof(char*) * 5);
-    result[0] = malloc(sizeof(char) * 6);
-    result[1] = malloc(sizeof(char) * 6);
-    result[2] = malloc(sizeof(char) * 6);
-    result[3] = malloc(sizeof(char) * 6);
-    result[4] = malloc(sizeof(char) * 6);
-    int i;
-    i = 0;
-    while (i < 4)
-    {
-        result[i][0] = '.';
-        result[i][1] = '.';
-        result[i][2] = '.';
-        result[i][3] = '.';
-        result[i][4] = '\n';
-        i++;
-    }
-    result[4][0] = '\0';
-    int     array_pieces[1][4] = {{1, 5, 9, 13}};
+    
+    result = initialize_result_array(4);
+    int     array_pieces[1][4] = {{2, 3, 5, 6}};
     printf("Return : %d\n", put_piece(result, array_pieces, 0, 0, 0, 0, 'a'));
     print_tab(result);
+    printf("\n\n\n\n\n");
+    
+    result = initialize_result_array(4);
+    int     array_pieces2[1][4] = {{1, 2, 3, 4}};
+    printf("Return : %d\n", put_piece(result, array_pieces2, 0, 0, 0, 0, 'b'));
+    print_tab(result);
+    printf("\n\n\n\n\n");
+    
+    result = initialize_result_array(4);
+    int     array_pieces3[1][4] = {{1, 2, 6, 7}};
+    printf("Return : %d\n", put_piece(result, array_pieces3, 0, 0, 0, 0, 'c'));
+    print_tab(result);
+    printf("\n\n\n\n\n");
+    
+    result = initialize_result_array(4);
+    int     array_pieces4[1][4] = {{1, 5, 9, 10}};
+    printf("Return : %d\n", put_piece(result, array_pieces4, 0, 0, 0, 0, 'd'));
+    print_tab(result);
+    printf("\n\n\n\n\n");
+    
+    result = initialize_result_array(4);
+    int     array_pieces5[1][4] = {{1, 2, 3, 7}};
+    printf("Return : %d\n", put_piece(result, array_pieces5, 0, 0, 0, 0, 'e'));
+    print_tab(result);
+    printf("\n\n\n\n\n");
+    
+    result = initialize_result_array(4);
+    int     array_pieces6[1][4] = {{1, 2, 5, 6}};
+    printf("Return : %d\n", put_piece(result, array_pieces6, 0, 0, 0, 0, 'f'));
+    print_tab(result);
+    printf("\n\n\n\n\n");
     return (0);
 }
