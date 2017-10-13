@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/12 18:19:12 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/13 10:16:43 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 void	ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
 
-
-int		check_1(char *str, int size)
+int	check_1(char *str, int size)
 {
 	int i;
 	int p;
@@ -50,8 +48,7 @@ int		check_1(char *str, int size)
 	return (0);
 }
 
-
-int		check_2(char *str)
+int	check_2(char *str)
 {
 	int i;
 	int connection;
@@ -78,22 +75,19 @@ int		check_2(char *str)
 	return (0);
 }
 
-
 char	**initialiser(int index, int index2, char c)
 {
-	int i;
-	int j;
-	char **y;
+	int		i;
+	int		j;
+	char	**y;
 
 	i = 0;
 	y = malloc(sizeof(char *) * index);
-
-	while(i < index)
+	while (i < index)
 	{
 		y[i] = malloc(sizeof(char) * index2);
 		i++;
 	}
-
 	i = 0;
 	while (i < index)
 	{
@@ -127,14 +121,14 @@ char	**reinitialiser(char **tab, int index, int index2, char c)
 	return (tab);
 }
 
-int **initialiser_tab_point_piece()
+int	**initialiser_tab_point_piece(void)
 {
 	int i;
 	int **y;
 
 	i = 0;
 	y = malloc(sizeof(int *) * 4);
-	while(i < 4)
+	while (i < 4)
 	{
 		y[i] = malloc(sizeof(int) * 2);
 		i++;
@@ -142,7 +136,7 @@ int **initialiser_tab_point_piece()
 	return (y);
 }
 
-int		**reduire(int **points_piece, int nb, int reduce)
+int	**reduire(int **points_piece, int nb, int reduce)
 {
 	int i;
 
@@ -155,7 +149,7 @@ int		**reduire(int **points_piece, int nb, int reduce)
 	return (points_piece);
 }
 
-int		**formater_point_piece(int **points_piece)
+int	**formater_point_piece(int **points_piece)
 {
 	int i;
 	int nb;
@@ -181,19 +175,18 @@ int		**formater_point_piece(int **points_piece)
 	return (points_piece);
 }
 
-char	**stock_piece(char *str, int nb_tetriminos)
+char	**stock_piece(char *str, int nb_tetriminos, int fd)
 {
-	char **tab_pieces;
-	char buf[(nb_tetriminos + 1) * 21];
-	int	i;
-	int j;
-	int pos_tab;
-	int fd;
+	char	**tab_pieces;
+	char	buf[(nb_tetriminos + 1) * 21];
+	int		i;
+	int		j;
+	int		pos_tab;
 
 	fd = open(str, O_RDONLY);
 	i = 0;
 	pos_tab = 0;
-	tab_pieces = initialiser(nb_tetriminos+1, 21, '0');
+	tab_pieces = initialiser(nb_tetriminos + 1, 21, '0');
 	read(fd, buf, nb_tetriminos * 21 - 1);
 	while (pos_tab < nb_tetriminos)
 	{
@@ -208,7 +201,6 @@ char	**stock_piece(char *str, int nb_tetriminos)
 	}
 	return (tab_pieces);
 }
-
 
 void	print_soluce(char **tab_soluce, int index)
 {
@@ -245,8 +237,7 @@ int		placer_point(char **tab_soluce, char c, int x, int y, int taille_soluce)
 	return (1);
 }
 
-
-int		**trouver_points(char *piece)
+int	**trouver_points(char *piece)
 {
 	int i;
 	int j;
@@ -279,8 +270,7 @@ int		**trouver_points(char *piece)
 	return (formater_point_piece(points_piece));
 }
 
-
-int		tester_piece(char **tab_soluce, char *piece, int taille_soluce, int x, int y, char c)
+int	tester_piece(char **tab_soluce, char *piece, int taille_soluce, int x, int y, char c)
 {
 	int i;
 	int **points_piece;
@@ -303,12 +293,12 @@ int		tester_piece(char **tab_soluce, char *piece, int taille_soluce, int x, int 
 	return (1);
 }
 
-int		placer_pieces(char **tab_soluce, char **tab_pieces, int index)
+int	placer_pieces(char **tab_soluce, char **tab_pieces, int index)
 {
-	int i;
-	char c;
-	int x;
-	int y;
+	int		i;
+	char	c;
+	int		x;
+	int		y;
 
 	i = 0;
 	c = 'A';
@@ -318,7 +308,7 @@ int		placer_pieces(char **tab_soluce, char **tab_pieces, int index)
 	{
 		if (!tester_piece(tab_soluce, tab_pieces[i], index, x, y, c))
 		{
-			if (y+1 < index)
+			if (y + 1 < index)
 				y++;
 			else
 			{
@@ -337,16 +327,14 @@ int		placer_pieces(char **tab_soluce, char **tab_pieces, int index)
 	return (0);
 }
 
-
 void	fillit(char **tab_pieces)
 {
-	int index;
-	char **tab_soluce;
-	unsigned char boolean;
+	int				index;
+	char			**tab_soluce;
+	unsigned char	boolean;
 
 	index = 2;
 	boolean = 0;
-
 	while (!boolean)
 	{
 		tab_soluce = initialiser(index, index, '.');
@@ -358,8 +346,7 @@ void	fillit(char **tab_pieces)
 	print_soluce(tab_soluce, index);
 }
 
-
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	int		fd;
 	int		size_read;
@@ -371,10 +358,9 @@ int		main(int argc, char **argv)
 	nb_tetriminos = 0;
 	if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
 		return (2);
-	while (size_read > 0)
+	while ((size_read = read(fd, buf, 21)) > 0)
 	{
 		size_read_temp = size_read;
-		size_read = read(fd, buf, 21);
 		if ((check_1(buf, size_read)) || (check_2(buf)) || nb_tetriminos > 26)
 		{
 			close(fd);
@@ -382,9 +368,9 @@ int		main(int argc, char **argv)
 		}
 		nb_tetriminos++;
 	}
-	if (size_read_temp == 21)
+	if (size_read_temp != 20)
 		return (8);
-	fillit(stock_piece(argv[1], nb_tetriminos-1));
+	fillit(stock_piece(argv[1], nb_tetriminos - 1, 0));
 	close(fd);
 	return (0);
 }
