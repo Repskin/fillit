@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/13 17:15:22 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/13 18:04:42 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ typedef struct		s_tetris
 {
 	int				**points;
 	char			c;
+	int				x;
+	int				y;
 	struct s_tetris	*next;
 }					t_tetris;
 
@@ -232,7 +234,9 @@ void	print_soluce(char **tab_soluce, int index)
 int		tester_point(char **tab_soluce, int x, int y, int taille_soluce)
 {
 	if (!(x < taille_soluce) || !(y < taille_soluce) || tab_soluce[x][y] != '.')
+	{
 		return (0);
+	}
 	return (1);
 }
 
@@ -277,21 +281,21 @@ int	**trouver_points(char *piece)
 	return (formater_point_piece(points_piece));
 }
 
-int	tester_piece(char **tab_soluce, t_tetris *tetris, int taille_soluce, int x, int y)
+int	tester_placer_piece(char **tab_soluce, t_tetris *tetris, int taille_soluce)
 {
 	int i;
 
 	i = 0;
 	while (i < 4)
 	{
-		if (!tester_point(tab_soluce, x + tetris->points[i][0], y + tetris->points[i][1], taille_soluce))
+		if (!tester_point(tab_soluce, tetris->x + tetris->points[i][0], tetris->y + tetris->points[i][1], taille_soluce))
 			return (0);
 		i++;
 	}
 	i = 0;
 	while (i < 4)
 	{
-		if (!placer_point(tab_soluce, tetris->c, x + tetris->points[i][0], y + tetris->points[i][1], taille_soluce))
+		if (!placer_point(tab_soluce, tetris->c, tetris->x + tetris->points[i][0], tetris->y + tetris->points[i][1], taille_soluce))
 			return (0);
 		i++;
 	}
@@ -300,30 +304,20 @@ int	tester_piece(char **tab_soluce, t_tetris *tetris, int taille_soluce, int x, 
 
 int	placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
 {
-	int		i;
-	int		x;
-	int		y;
-
-	i = 0;
-	x = 0;
-	y = 0;
-	while (tetris != NULL && x < index && y < index)
+	while (tetris != NULL && tetris->x < index && tetris->y < index)
 	{
-		if (!tester_piece(tab_soluce, tetris, index, x, y))
+		if (!tester_placer_piece(tab_soluce, tetris, index))
 		{
-			if (y + 1 < index)
-				y++;
+			if (tetris->y + 1 < index)
+				tetris->y++;
 			else
 			{
-				x++;
-				y = 0;
+				tetris->x++;
+				tetris->y = 0;
 			}
 		}
 		else
-		{
 			tetris = tetris->next;
-			i++;
-		}
 	}
 	if (tetris == NULL)
 		return (1);
@@ -338,6 +332,8 @@ t_tetris	*set_pieces(char **tab_pieces, char c)
 	{
 		tetris = malloc(sizeof(t_tetris));
 		tetris->c = c;
+		tetris->x = 0;
+		tetris->y = 0;
 		tetris->points = trouver_points(tab_pieces[0]);
 		tetris->next = set_pieces(++tab_pieces, ++c);
 	}
