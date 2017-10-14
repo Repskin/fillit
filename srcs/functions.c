@@ -13,15 +13,15 @@
 #include "../includes/fillit.h"
 
 /*
- print_solution(char **array_solution, int index)
- 
- Return nothing
- 
- Params :
- char **array_solution  = array which contains the solution
- int index              = integer which contains the width of the solution
- 
- Function which print the array of the solution
+** print_solution(char **array_solution, int index)
+**
+** Return nothing
+**
+** Params :
+** char **array_solution  = array which contains the solution
+** int index              = integer which contains the width of the solution
+**
+** Function which print the array of the solution
 */
 void    print_solution(int **array_solution, int index)
 {
@@ -44,14 +44,14 @@ void    print_solution(int **array_solution, int index)
 }
 
 /*
- **initialize_solution(int index)
- 
- Return a string array
- 
- Params :
- int index  = integer which contains the with of the solution
- 
- Function which initialize the array of the solution
+** **initialize_solution(int index)
+**
+** Return a string array
+**
+** Params :
+** int index  = integer which contains the with of the solution
+**
+** Function which initialize the array of the solution
 */
 char    **initialize_solution(int index)
 {
@@ -81,14 +81,14 @@ char    **initialize_solution(int index)
 }
 
 /*
- count_pieces(int array_pieces[][4])
- 
- Return an integer with the number of pieces
- 
- Params :
- int array_pieces[][4]   = an int array which contains each pieces
- 
- Function which return the number of pieces
+** count_pieces(int array_pieces[][4])
+**
+** Return an integer with the number of pieces
+**
+** Params :
+** int array_pieces[][4]   = an int array which contains each pieces
+**
+** Function which return the number of pieces
 */
 int     count_pieces(int array_pieces[][4])
 {

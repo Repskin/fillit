@@ -13,18 +13,18 @@
 #include "../includes/fillit.h"
 
 /*
- check_grid(char *str, int size)
- 
- Return an integer
- 0 if the grid is wrong
- 1 if the grid is good
- 
- Params :
- char *str  = the string of the piece
- int size   = the numbers of characters read
- 
- Check if the grid have 4 characters #
- Check if the grid have the good number of characters
+** check_grid(char *str, int size)
+**
+** Return an integer
+** 0 if the grid is wrong
+** 1 if the grid is good
+**
+** Params :
+** char *str  = the string of the piece
+** int size   = the numbers of characters read
+**
+** Check if the grid have 4 characters #
+** Check if the grid have the good number of characters
 */
 int     check_grid(char *str, int size)
 {
