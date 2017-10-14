@@ -4,7 +4,7 @@
 int     put_piece(char **array_result, int array_pieces[][4], int index, int x, int y, int piece, char c)
 {
     int result;
-    
+
     result = 0;
     printf("Test sur x = %d, y = %d\n", x, y);
     if (array_result[y][x] == '.')
@@ -37,10 +37,10 @@ void    print_tab(char **result)
     int j;
     i = 0;
     j = 0;
-    printf("|x|0|1|2|3|\n|");
+    printf("|x|0|1|2|3|\n");
     while (result[i] && result[i+1])
     {
-        printf("%d", i);
+        printf("|%d", i);
         while (result[i][j])
         {
             printf("|%c", result[i][j]);
