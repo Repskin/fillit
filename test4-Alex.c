@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/13 20:17:26 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/14 11:50:12 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+
+/*
+** JUSTE POUR VOIR LE Temps
+*/
+#include <time.h>
 
 typedef struct		s_tetris
 {
@@ -208,7 +214,7 @@ char	**stock_piece(char *str, int nb_tetriminos, int fd)
 	i = 0;
 	pos_tab = 0;
 	tab_pieces = initialiser(nb_tetriminos + 1, 21, '0');
-	read(fd, buf, nb_tetriminos * 21 - 1);
+	read(fd, buf, (nb_tetriminos) * 21);
 	while (pos_tab < nb_tetriminos)
 	{
 		j = 0;
@@ -243,8 +249,13 @@ void	print_soluce(char **tab_soluce, int index)
 	}
 }
 
-int		tester_point(char **tab_soluce, int x, int y, int taille_soluce)
+int		tester_point(char **tab_soluce, t_tetris *t, int i, int taille_soluce)
 {
+	int		x;
+	int		y;
+
+	x = t->x + t->points[i][0];
+	y = t->y + t->points[i][1];
 	if (!(x < taille_soluce) || !(y < taille_soluce) || tab_soluce[x][y] != '.')
 	{
 		return (0);
@@ -252,28 +263,31 @@ int		tester_point(char **tab_soluce, int x, int y, int taille_soluce)
 	return (1);
 }
 
-int		placer_point(char **tab_soluce, char c, int x, int y, int taille_soluce)
+int		placer_point(char **tab_soluce, t_tetris *t, int i, int taille_soluce)
 {
+	int		x;
+	int		y;
+	char	c;
+
+	x = t->x + t->points[i][0];
+	y = t->y + t->points[i][1];
+	c = t->c;
 	if (!(x < taille_soluce) || !(y < taille_soluce) || tab_soluce[x][y] != '.')
 		return (0);
 	tab_soluce[x][y] = c;
 	return (1);
 }
 
-int	**trouver_points(char *piece)
+int	**trouver_points(char *piece, int j, int k)
 {
 	int i;
-	int j;
-	int k;
 	int nb_diese;
 	int **points_piece;
 
-	i = 0;
-	j = 0;
-	k = 0;
+	i = -1;
 	nb_diese = 0;
 	points_piece = initialiser_tab_point_piece();
-	while (piece[i] && nb_diese != 4)
+	while (piece[++i] && nb_diese != 4)
 	{
 		if (piece[i] == '#')
 		{
@@ -288,73 +302,62 @@ int	**trouver_points(char *piece)
 		}
 		else
 			j++;
-		i++;
 	}
 	return (formater_point_piece(points_piece));
 }
 
-int	tester_placer_piece(char **tab_soluce, t_tetris *tetris, int taille_soluce, int x, int y)
+int	tester_placer_piece(char **tab_soluce, t_tetris *tetris, int taille_soluce)
 {
 	int i;
 
 	i = 0;
 	while (i < 4)
 	{
-
-		if (!tester_point(tab_soluce, (x + tetris->points[i][0]), (y + tetris->points[i][1]), taille_soluce))
+		if (!tester_point(tab_soluce, tetris, i, taille_soluce))
 			return (0);
 		i++;
 	}
 	i = 0;
 	while (i < 4)
 	{
-		if (!placer_point(tab_soluce, tetris->c, (x + tetris->points[i][0]), (y + tetris->points[i][1]), taille_soluce))
+		if (!placer_point(tab_soluce, tetris, i, taille_soluce))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
+void	put_zero_tetris(t_tetris *tetris)
+{
+	tetris->x = 0;
+	tetris->y = 0;
+}
+
 int	placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
 {
-	int x;
-	int y;
-
-	x = 0;
-	y = 0;
-	while (tetris != NULL && x < index && y < index)
+	while (tetris != NULL && tetris->x < index && tetris->y < index)
 	{
-		printf("x : %d  -  y : %d\n", tetris->x, tetris->y);
-		printf("x : %d  -  y : %d\n", x, y);
-		printf("index : %d\n", index);
-		printf("TEST : %c\n", tetris->c);
-		if (tetris->x != x || tetris->y != y)
-		printf("                             ERROR !!!!!!!!\n");
-		printf("-------------------------\n");
-		if (!tester_placer_piece(tab_soluce, tetris, index, x, y))
+		if (!tester_placer_piece(tab_soluce, tetris, index))
 		{
-			if (y + 1 < index)
+			if (tetris->y + 1 < index)
 			{
-				y++;
 				tetris->y++;
 			}
 			else
 			{
-				x++;
-				y = 0;
 				tetris->x++;
 				tetris->y = 0;
 			}
 		}
 		else
 		{
+			put_zero_tetris(tetris);
 			tetris = tetris->next;
 		}
 	}
 	if (tetris == NULL)
 		return (1);
-	tetris->x = 0;
-	tetris->y = 0;
+	put_zero_tetris(tetris);
 	return (0);
 }
 
@@ -368,7 +371,7 @@ t_tetris	*set_pieces(char **tab_pieces, char c)
 		tetris->c = c;
 		tetris->x = 0;
 		tetris->y = 0;
-		tetris->points = trouver_points(tab_pieces[0]);
+		tetris->points = trouver_points(tab_pieces[0], 0, 0);
 		tetris->next = set_pieces(++tab_pieces, ++c);
 	}
 	else
@@ -397,7 +400,7 @@ void	fillit(char **tab_pieces)
 	print_soluce(tab_soluce, index);
 }
 
-int	main(int argc, char **argv)
+int	fonction2(char *argv)
 {
 	int		fd;
 	int		size_read;
@@ -407,28 +410,49 @@ int	main(int argc, char **argv)
 
 	size_read = 1;
 	nb_tetriminos = 0;
-	if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
-	{
-		ft_putstr("usage: ./fillit <file>\n");
-		return (2);
-	}
+	if ((fd = open(argv, O_RDONLY)) < 0)
+		return (0);
 	while ((size_read = read(fd, buf, 21)) > 0)
 	{
 		size_read_temp = size_read;
 		if ((check_1(buf, size_read)) || (check_2(buf)) || nb_tetriminos > 26)
 		{
 			close(fd);
-			ft_putstr("error\n");
-			return (1);
+			return (0);
 		}
 		nb_tetriminos++;
 	}
 	if (size_read_temp != 20)
-	{
-		ft_putstr("error\n");
-		return (8);
-	}
-	fillit(stock_piece(argv[1], nb_tetriminos - 1, 0));
+		return (0);
 	close(fd);
+	return (nb_tetriminos);
+}
+
+int	main(int argc, char **argv)
+{
+	/*
+	** JUSTE POUR VOIR LE TEMPS
+	*/
+	long clk_tck = CLOCKS_PER_SEC;
+    clock_t t1, t2;
+	t1 = clock();
+
+	int	nb_tetriminos;
+
+	if (argc != 2)
+	{
+		ft_putstr("usage: ./fillit <file>\n");
+		return (2);
+	}
+	if ((nb_tetriminos = fonction2(argv[1])))
+		fillit(stock_piece(argv[1], nb_tetriminos, 0));
+	else
+		ft_putstr("error\n");
+
+	/*
+	** JUSTE POUR VOIR LE Temps
+	*/
+	t2 = clock();
+	printf("--------------------\nTemps (s) : %lf \n", (double)(t2-t1)/(double)clk_tck);
 	return (0);
 }
