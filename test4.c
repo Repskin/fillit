@@ -1,6 +1,6 @@
 //
 //  test4.c
-//  
+//
 //
 //  Created by Theo Burnouf on 10/13/17.
 //
@@ -11,7 +11,7 @@
 int     factorielle(n)
 {
     int result;
-    
+
     result = n;
     while (n > 1)
     {
@@ -29,19 +29,27 @@ int     **combinaisons(n)
     int k;
     int l;
     int m;
-    
+	int fact;
+
     i = 0;
     j = 0;
     k = 0;
     l = 0;
     m = n - 1;
-    result = malloc(sizeof(int*) * factorielle(n));
-    while (i < factorielle(n))
+	fact = factorielle(n);
+    result = malloc(sizeof(int*) * fact);
+    while (i < fact)
     {
         result[i] = malloc(sizeof(int) * n);
+		j = 0;
+		while (j < n)
+		{
+			result[i][j] = 0;
+			j++;
+		}
         i++;
     }
-    i = 0;
+	i = 0;
     while (i < n)
     {
         result[0][i] = n - i;
