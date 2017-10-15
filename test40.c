@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test4-Alex.c                                       :+:      :+:    :+:   */
+/*   test40.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/15 09:19:00 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/15 11:50:29 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,7 +378,7 @@ t_tetris	*set_pieces(char **tab_pieces, char c)
 	return (tetris);
 }
 
-int	get_taille_soluce_min(int nb_tetriminos)
+int	t_soluce_min(int nb_tetriminos)
 {
 	int i;
 
@@ -388,23 +388,39 @@ int	get_taille_soluce_min(int nb_tetriminos)
 	return (i);
 }
 
-void	fillit(char **tab_pieces, int nb_tetriminos)
+t_tetris	**get_tab_tetris(t_tetris *tetris, int index)
 {
-	int				index;
+	t_tetris	**tab_tetris;
+
+	tab_tetris = malloc(sizeof(t_tetris*) * (index + 1));
+	tetris = NULL;
+	return (tab_tetris);
+}
+
+void	fillit(char **tab_pieces, int index)
+{
 	char			**tab_soluce;
 	unsigned char	boolean;
 	t_tetris		*tetris;
+	t_tetris		**tab_tetris;
+	int				i;
 
-	index = get_taille_soluce_min(nb_tetriminos);
 	boolean = 0;
+	i = 0;
 	tetris = set_pieces(tab_pieces, 'A');
+	tab_tetris = get_tab_tetris(tetris, index);
 	while (!boolean)
 	{
-		tab_soluce = initialiser(index, index, '.');
-		if (!placer_pieces(tab_soluce, tetris, index))
-			index++;
-		else
-			boolean = 1;
+		while (tab_tetris[i] && !boolean)
+		{
+			tab_soluce = initialiser(index, index, '.');
+			if (!placer_pieces(tab_soluce, tab_tetris[i], index))
+				i++;
+			else
+				boolean = 1;
+		}
+		index++;
+		i = 0;
 	}
 	print_soluce(tab_soluce, index);
 }
@@ -446,15 +462,15 @@ int	main(int argc, char **argv)
     clock_t t1, t2;
 	t1 = clock();
 
-	int	nb_tetriminos;
+	int	nb;
 
 	if (argc != 2)
 	{
 		ft_putstr("usage: ./fillit <file>\n");
 		return (2);
 	}
-	if ((nb_tetriminos = fonction2(argv[1])))
-		fillit(stock_piece(argv[1], nb_tetriminos, 0), nb_tetriminos);
+	if ((nb = fonction2(argv[1])))
+		fillit(stock_piece(argv[1], nb, 0), t_soluce_min(nb));
 	else
 		ft_putstr("error\n");
 
