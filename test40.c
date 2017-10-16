@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/15 11:50:29 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/15 19:06:59 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,16 +388,34 @@ int	t_soluce_min(int nb_tetriminos)
 	return (i);
 }
 
-t_tetris	**get_tab_tetris(t_tetris *tetris, int index)
+t_tetris	**get_tab_tetris(t_tetris tetris, int nb)
 {
+	int			i;
 	t_tetris	**tab_tetris;
+	t_tetris	*pt_tetris;
+	t_tetris	*tab_tetris_reel;
 
-	tab_tetris = malloc(sizeof(t_tetris*) * (index + 1));
-	tetris = NULL;
+	i = 0;
+	pt_tetris = &tetris;
+	tab_tetris_reel = malloc(sizeof(t_tetris) * nb);
+	while (i < nb)
+	{
+		tab_tetris_reel[i] = *pt_tetris;
+		pt_tetris = pt_tetris->next;
+		i++;
+	}
+
+	tab_tetris = malloc(sizeof(t_tetris*) * nb);
+	i = 0;
+	while (i < nb)
+	{
+		tab_tetris[i] = &tetris;
+		i++;
+	}
 	return (tab_tetris);
 }
 
-void	fillit(char **tab_pieces, int index)
+void	fillit(char **tab_pieces, int index, int nb)
 {
 	char			**tab_soluce;
 	unsigned char	boolean;
@@ -406,23 +424,24 @@ void	fillit(char **tab_pieces, int index)
 	int				i;
 
 	boolean = 0;
-	i = 0;
 	tetris = set_pieces(tab_pieces, 'A');
-	tab_tetris = get_tab_tetris(tetris, index);
+	tab_tetris = get_tab_tetris(*tetris, nb);
 	while (!boolean)
 	{
-		while (tab_tetris[i] && !boolean)
+		i = 0;
+		while (i < nb && !boolean)
 		{
 			tab_soluce = initialiser(index, index, '.');
 			if (!placer_pieces(tab_soluce, tab_tetris[i], index))
 				i++;
 			else
+			{
+				print_soluce(tab_soluce, index);
 				boolean = 1;
+			}
 		}
 		index++;
-		i = 0;
 	}
-	print_soluce(tab_soluce, index);
 }
 
 int	fonction2(char *argv)
@@ -470,7 +489,7 @@ int	main(int argc, char **argv)
 		return (2);
 	}
 	if ((nb = fonction2(argv[1])))
-		fillit(stock_piece(argv[1], nb, 0), t_soluce_min(nb));
+		fillit(stock_piece(argv[1], nb, 0), t_soluce_min(nb), nb);
 	else
 		ft_putstr("error\n");
 
@@ -478,6 +497,7 @@ int	main(int argc, char **argv)
 	** JUSTE POUR VOIR LE Temps
 	*/
 	t2 = clock();
-	printf("--------------------\nTemps (s) : %lf \n", (double)(t2-t1)/(double)clk_tck);
+	printf("--------------------\n");
+	printf("Temps (s) : %lf \n", (double)(t2-t1)/(double)clk_tck);
 	return (0);
 }
