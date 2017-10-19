@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/15 19:06:59 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/19 15:22:18 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 ** JUSTE POUR VOIR LE Temps
 */
 #include <time.h>
+
+#include "test60.c"
 
 typedef struct		s_tetris
 {
@@ -388,12 +390,18 @@ int	t_soluce_min(int nb_tetriminos)
 	return (i);
 }
 
+t_tetris	*liste_possibilite(char *str_possibilites, t_tetris *tab_tetris_reel)
+{
+	
+}
+
 t_tetris	**get_tab_tetris(t_tetris tetris, int nb)
 {
 	int			i;
 	t_tetris	**tab_tetris;
 	t_tetris	*pt_tetris;
 	t_tetris	*tab_tetris_reel;
+	char		**tab_possibilites;
 
 	i = 0;
 	pt_tetris = &tetris;
@@ -404,12 +412,12 @@ t_tetris	**get_tab_tetris(t_tetris tetris, int nb)
 		pt_tetris = pt_tetris->next;
 		i++;
 	}
-
 	tab_tetris = malloc(sizeof(t_tetris*) * nb);
+	tab_possibilites = chercher_possibilites(nb);
 	i = 0;
 	while (i < nb)
 	{
-		tab_tetris[i] = &tetris;
+		tab_tetris[i] = liste_possibilite(tab_possibilites[i], tab_tetris_reel);
 		i++;
 	}
 	return (tab_tetris);
