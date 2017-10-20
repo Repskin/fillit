@@ -130,7 +130,7 @@ void    heap_permute(int n, int *numbers, int **result)
     }
 }
 
-int     main(void)
+int     main(int argc, char **argv)
 {
     int **result;
     int *num;
@@ -138,7 +138,9 @@ int     main(void)
     int j;
     int n;
     
-    n = 5;
+    if (argc != 2)
+        return (0);
+    n = atoi(argv[1]);
     i = n;
     result = init_result(n);
     num = malloc(sizeof(int) * n);
