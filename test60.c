@@ -143,5 +143,5 @@ char	**chercher_possibilites(int nb_pieces)
 	str[i] = '\0';
 	tab_soluces = trouver_possibilites(str);
 	//print_tab_possibilites(tab_soluces, factorielle(nb_pieces), nb_pieces);
-	return (0);
+	return (tab_soluces);
 }

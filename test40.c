@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/19 15:22:18 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/20 15:37:27 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,9 +341,7 @@ int	placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
 		if (!tester_placer_piece(tab_soluce, tetris, index))
 		{
 			if (tetris->y + 1 < index)
-			{
 				tetris->y++;
-			}
 			else
 			{
 				tetris->x++;
@@ -390,9 +388,19 @@ int	t_soluce_min(int nb_tetriminos)
 	return (i);
 }
 
-t_tetris	*liste_possibilite(char *str_possibilites, t_tetris *tab_tetris_reel)
+t_tetris	*liste_possibilite(char *str_possibilites, t_tetris *tab_tetris_reel, int i)
 {
-	
+	t_tetris	*tetris;
+
+	if (str_possibilites[i])
+	{
+		tetris = malloc(sizeof(t_tetris));
+		tetris = &tab_tetris_reel[(int)(str_possibilites[i] - 65)];
+		tetris->next = liste_possibilite(str_possibilites, tab_tetris_reel, ++i);
+	}
+	else
+		tetris = NULL;
+	return (tetris);
 }
 
 t_tetris	**get_tab_tetris(t_tetris tetris, int nb)
@@ -412,12 +420,19 @@ t_tetris	**get_tab_tetris(t_tetris tetris, int nb)
 		pt_tetris = pt_tetris->next;
 		i++;
 	}
-	tab_tetris = malloc(sizeof(t_tetris*) * nb);
+	tab_tetris = malloc(sizeof(t_tetris*) * factorielle(nb));
 	tab_possibilites = chercher_possibilites(nb);
 	i = 0;
-	while (i < nb)
+	while (i < factorielle(nb))
 	{
-		tab_tetris[i] = liste_possibilite(tab_possibilites[i], tab_tetris_reel);
+		tab_tetris[i] = liste_possibilite(tab_possibilites[i], tab_tetris_reel, 0);
+		pt_tetris = tab_tetris[0];
+		while (pt_tetris != NULL)
+		{
+			printf("%c", pt_tetris->c);
+			pt_tetris = pt_tetris->next;
+		}
+		printf("\n");
 		i++;
 	}
 	return (tab_tetris);
@@ -506,6 +521,6 @@ int	main(int argc, char **argv)
 	*/
 	t2 = clock();
 	printf("--------------------\n");
-	printf("Temps (s) : %lf \n", (double)(t2-t1)/(double)clk_tck);
+	printf("Temps : %lfs \n", (double)(t2-t1)/(double)clk_tck);
 	return (0);
 }
