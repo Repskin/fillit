@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/20 15:37:27 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/21 15:14:29 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,13 +403,11 @@ t_tetris	*liste_possibilite(char *str_possibilites, t_tetris *tab_tetris_reel, i
 	return (tetris);
 }
 
-t_tetris	**get_tab_tetris(t_tetris tetris, int nb)
+t_tetris	*get_tab_tetris(t_tetris tetris, int nb, char **tab_possibilites, int indice)
 {
 	int			i;
-	t_tetris	**tab_tetris;
 	t_tetris	*pt_tetris;
 	t_tetris	*tab_tetris_reel;
-	char		**tab_possibilites;
 
 	i = 0;
 	pt_tetris = &tetris;
@@ -420,22 +418,7 @@ t_tetris	**get_tab_tetris(t_tetris tetris, int nb)
 		pt_tetris = pt_tetris->next;
 		i++;
 	}
-	tab_tetris = malloc(sizeof(t_tetris*) * factorielle(nb));
-	tab_possibilites = chercher_possibilites(nb);
-	i = 0;
-	while (i < factorielle(nb))
-	{
-		tab_tetris[i] = liste_possibilite(tab_possibilites[i], tab_tetris_reel, 0);
-		pt_tetris = tab_tetris[0];
-		while (pt_tetris != NULL)
-		{
-			printf("%c", pt_tetris->c);
-			pt_tetris = pt_tetris->next;
-		}
-		printf("\n");
-		i++;
-	}
-	return (tab_tetris);
+	return (liste_possibilite(tab_possibilites[indice], tab_tetris_reel, 0));
 }
 
 void	fillit(char **tab_pieces, int index, int nb)
@@ -443,19 +426,19 @@ void	fillit(char **tab_pieces, int index, int nb)
 	char			**tab_soluce;
 	unsigned char	boolean;
 	t_tetris		*tetris;
-	t_tetris		**tab_tetris;
+	char			**tab_possibilites;
 	int				i;
 
 	boolean = 0;
 	tetris = set_pieces(tab_pieces, 'A');
-	tab_tetris = get_tab_tetris(*tetris, nb);
+	tab_possibilites = chercher_possibilites(nb);
 	while (!boolean)
 	{
 		i = 0;
-		while (i < nb && !boolean)
+		while (i < factorielle(nb) && !boolean)
 		{
 			tab_soluce = initialiser(index, index, '.');
-			if (!placer_pieces(tab_soluce, tab_tetris[i], index))
+			if (!placer_pieces(tab_soluce, get_tab_tetris(*tetris, nb, tab_possibilites, i), index))
 				i++;
 			else
 			{

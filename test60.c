@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test60.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/10/21 15:24:46 by afelpin           #+#    #+#             */
+/*   Updated: 2017/10/21 15:25:31 by afelpin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int	ft_strlen(const char *s)
+int		ft_strlen(const char *s)
 {
-	int length;
+	int		length;
 
 	length = 0;
 	while (s[length])
@@ -12,9 +24,9 @@ int	ft_strlen(const char *s)
 	return (length);
 }
 
-int	factorielle(int nb)
+int		factorielle(int nb)
 {
-	int i;
+	int		i;
 
 	i = nb - 1;
 	while (i > 1)
@@ -22,7 +34,7 @@ int	factorielle(int nb)
 	return (nb);
 }
 
-int	check_double(char *str)
+int		check_double(char *str)
 {
 	int		i;
 	int		j;
@@ -46,8 +58,8 @@ int	check_double(char *str)
 
 void	print_tab_possibilites(char **tab_possibilites, int x, int y)
 {
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (i < x)
@@ -65,8 +77,8 @@ void	print_tab_possibilites(char **tab_possibilites, int x, int y)
 
 void	remplir_tab(char *str, char **tab_possibilites)
 {
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -81,8 +93,8 @@ void	remplir_tab(char *str, char **tab_possibilites)
 
 void	faire_combi(char *str, char *tmp, int ind, char **tab_possibilites)
 {
-	int i;
-	int len;
+	int		i;
+	int		len;
 
 	i = 0;
 	len = ft_strlen(str);
@@ -142,6 +154,5 @@ char	**chercher_possibilites(int nb_pieces)
 	}
 	str[i] = '\0';
 	tab_soluces = trouver_possibilites(str);
-	//print_tab_possibilites(tab_soluces, factorielle(nb_pieces), nb_pieces);
 	return (tab_soluces);
 }
