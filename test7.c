@@ -1,14 +1,17 @@
-//
-//  test4.c
-//
-//
-//  Created by Theo Burnouf on 10/13/17.
-//
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test6_theo.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/10/08 14:58:23 by tburnouf          #+#    #+#             */
+/*   Updated: 2017/10/23 09:14:23 by tburnouf         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 int     factorielle(n)
 {
@@ -44,7 +47,7 @@ char     **init_result(int n)
     {
         while (j < n)
         {
-            result[i][j] = 0 + 'A';
+            result[i][j] = 'A';
             j++;
         }
         j = 0;
@@ -62,43 +65,23 @@ void    swap(int *x, int *y)
     *y = temp;
 }
 
-void    init_heap(int n, int *c, int **result, int *numbers)
+void    init_heap(int n, int *c, char **result, int *numbers)
 {
     int i;
+    int j;
     
     i = 0;
-    while (result[i])
+    while (i < n)
     {
-        j = 0;
-        if (result[i][0] == 0)
-            while (result[i][j])
-            {
-                result[i][j] = a[j];
-                j++;
-            }
+        c[i] = 0;
         i++;
     }
     i = 0;
     while (i < n)
     {
-        result[0][i] = numbers[i];
+        result[0][i] = (char)(numbers[i] + '@');
         i++;
     }
-}
-
-void    init_value(int *i, int *j, int *k)
-{
-    *i = 0;
-    *j = 1;
-    *k = -1;
-}
-
-void    update_value(int *j, int *k, int *c, int *i)
-{
-    *j += 1;
-    *k = -1;
-    c[*i]++;
-    *i = 0;
 }
 
 void    heap_permute(int n, int *numbers, char **result)
@@ -115,34 +98,24 @@ void    heap_permute(int n, int *numbers, char **result)
     init_heap(n, c, result, numbers);
     while (i < n)
     {
-        c[i] = 0;
-        i++;
-    }
-    while (k <  n)
-    {
-        result[j][k] = numbers[k];
-        k++;
-    }
-    j++;
-    k = 0;
-    i = 0;
-    while (i < n)
-    {
         if (c[i] < i)
         {
             if (i % 2 == 0)
                 swap(&numbers[0], &numbers[i]);
             else
                 swap(&numbers[c[i]], &numbers[i]);
-            while (k++ < n)
-                result[j][k] = numbers[k] + 'A' - 1;
-            update_value(&j, &k, c, &i);
+            while (k <  n)
+            {
+                result[j][k] = (char)(numbers[k] + '@');
+                k++;
+            }
+            j++;
+            k = 0;
+            c[i]++;
+            i = 0;
         }
         else
-        {
-            c[i] = 0;
-            i++;
-        }
+            c[i++] = 0;
     }
 }
 
@@ -153,10 +126,6 @@ int     main(int argc, char **argv)
     int i;
     int j;
     int n;
-    
-    long clk_tck = CLOCKS_PER_SEC;
-    clock_t t1, t2;
-    t1 = clock();
     
     if (argc != 2)
         return (0);
@@ -170,19 +139,19 @@ int     main(int argc, char **argv)
         i--;
     }
     heap_permute(n, num, result);
-    /*i = 0;
+    i = 0;
     j = 0;
     while (i < factorielle(n))
-    {
-        while (j < n)
-        {
-            printf("%c", result[i][j]);
-            j++;
-        }
-        j = 0;
-        printf("\n");
-        i++;
-    }*/
+     {
+     while (j < n)
+     {
+     printf("%c", result[i][j]);
+     j++;
+     }
+     j = 0;
+     printf("\n");
+     i++;
+     }
     printf("\n\n%d Lignes affichees\n", i);
     return (0);
 }
