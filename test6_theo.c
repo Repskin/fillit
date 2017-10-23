@@ -1,10 +1,14 @@
-//
-//  test4.c
-//
-//
-//  Created by Theo Burnouf on 10/13/17.
-//
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test6_theo.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/10/08 14:58:23 by tburnouf          #+#    #+#             */
+/*   Updated: 2017/10/23 09:14:23 by tburnouf         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,24 +65,24 @@ void    swap(int *x, int *y)
     *y = temp;
 }
 
-/*void printArr(int a[], int n, int **result)
+void    init_heap(int n, int *c, int **result, int *numbers)
 {
     int i;
     int j;
     
     i = 0;
-    while (result[i])
+    while (i < n)
     {
-        j = 0;
-        if (result[i][0] == 0)
-            while (result[i][j])
-            {
-                result[i][j] = a[j];
-                j++;
-            }
+        c[i] = 0;
         i++;
     }
-}*/
+    i = 0;
+    while (i < n)
+    {
+        result[0][i] = numbers[i];
+        i++;
+    }
+}
 
 void    heap_permute(int n, int *numbers, int **result)
 {
@@ -89,21 +93,9 @@ void    heap_permute(int n, int *numbers, int **result)
     
     c = malloc(sizeof(int) * n);
     i = 0;
-    j = 0;
+    j = 1;
     k = 0;
-    while (i < n)
-    {
-        c[i] = 0;
-        i++;
-    }
-    while (k <  n)
-    {
-        result[j][k] = numbers[k];
-        k++;
-    }
-    j++;
-    k = 0;
-    i = 0;
+    init_heap(n, c, result, numbers);
     while (i < n)
     {
         if (c[i] < i)
@@ -123,10 +115,7 @@ void    heap_permute(int n, int *numbers, int **result)
             i = 0;
         }
         else
-        {
-            c[i] = 0;
-            i++;
-        }
+            c[i++] = 0;
     }
 }
 
@@ -152,7 +141,7 @@ int     main(int argc, char **argv)
     heap_permute(n, num, result);
     i = 0;
     j = 0;
-    while (i < factorielle(n))
+    /*while (i < factorielle(n))
     {
         while (j < n)
         {
@@ -162,6 +151,7 @@ int     main(int argc, char **argv)
         j = 0;
         printf("\n");
         i++;
-    }
+    }*/
+    printf("\n\n%d Lignes affichees\n", i);
     return (0);
 }
