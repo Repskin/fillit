@@ -27,9 +27,9 @@ int     factorielle(n)
     return (result);
 }
 
-int     **init_result(int n)
+char     **init_result(int n)
 {
-    int **result;
+    char **result;
     int i;
     int j;
     int nb_comb;
@@ -48,7 +48,7 @@ int     **init_result(int n)
     {
         while (j < n)
         {
-            result[i][j] = 0;
+            result[i][j] = 0 + 'A';
             j++;
         }
         j = 0;
@@ -66,7 +66,7 @@ void    swap(int *x, int *y)
     *y = temp;
 }
 
-void    init_heap(int n, int *c, int **result, int *numbers)
+void    init_heap(int n, int *c, char **result, int *numbers)
 {
     int i;
     
@@ -79,7 +79,7 @@ void    init_heap(int n, int *c, int **result, int *numbers)
     i = 0;
     while (i < n)
     {
-        result[0][i] = numbers[i];
+        result[0][i] = numbers[i] + 'A' - 1;
         i++;
     }
 }
@@ -99,7 +99,7 @@ void    update_value(int *j, int *k, int *c, int *i)
     *i = 0;
 }
 
-void    heap_permute(int n, int *numbers, int **result)
+void    heap_permute(int n, int *numbers, char **result)
 {
     int *c;
     int i;
@@ -118,7 +118,7 @@ void    heap_permute(int n, int *numbers, int **result)
             else
                 swap(&numbers[c[i]], &numbers[i]);
             while (k++ < n)
-                result[j][k] = numbers[k];
+                result[j][k] = numbers[k] + 'A' - 1;
             update_value(&j, &k, c, &i);
         }
         else
@@ -128,7 +128,7 @@ void    heap_permute(int n, int *numbers, int **result)
 
 int     main(int argc, char **argv)
 {
-    int **result;
+    char **result;
     int *num;
     int i;
     int j;
@@ -150,19 +150,19 @@ int     main(int argc, char **argv)
         i--;
     }
     heap_permute(n, num, result);
-    i = 0;
+    /*i = 0;
     j = 0;
     while (i < factorielle(n))
     {
         while (j < n)
         {
-            printf("%d", result[i][j]);
+            printf("%c", result[i][j]);
             j++;
         }
         j = 0;
         printf("\n");
         i++;
-    }
+    }*/
     t2 = clock();
     printf("Temps : %lfs\n", (double)(t2-t1)/(double)clk_tck);
     return (0);
