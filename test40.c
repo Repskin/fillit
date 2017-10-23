@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/23 11:27:08 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/23 15:41:56 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 */
 #include <time.h>
 
-#include "test60.c"
+#include "test61.c"
 
 typedef struct		s_tetris
 {
