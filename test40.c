@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/21 15:14:29 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/23 11:27:08 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,6 +432,11 @@ void	fillit(char **tab_pieces, int index, int nb)
 	boolean = 0;
 	tetris = set_pieces(tab_pieces, 'A');
 	tab_possibilites = chercher_possibilites(nb);
+	/*for (int z = 0; z < factorielle(nb); z++)
+	{
+		printf("%s\n", tab_possibilites[z]);
+	}
+	printf("\n");*/
 	while (!boolean)
 	{
 		i = 0;
@@ -442,6 +447,8 @@ void	fillit(char **tab_pieces, int index, int nb)
 				i++;
 			else
 			{
+				//printf("%s\n\n", tab_possibilites[i]);
+				//printf("Solution :\n");
 				print_soluce(tab_soluce, index);
 				boolean = 1;
 			}
@@ -503,7 +510,7 @@ int	main(int argc, char **argv)
 	** JUSTE POUR VOIR LE Temps
 	*/
 	t2 = clock();
-	printf("--------------------\n");
+	printf("\n");
 	printf("Temps : %lfs \n", (double)(t2-t1)/(double)clk_tck);
 	return (0);
 }
