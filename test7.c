@@ -1,33 +1,22 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   test6_theo.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tburnouf <tburnouf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/08 14:58:23 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/23 16:58:53 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/23 09:14:23 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-=======
-//
-//  test4.c
-//
-//
-//  Created by Theo Burnouf on 10/13/17.
-//
-//
->>>>>>> 99ae7d811b280b4ffa87cd6c90511e60761d6ace
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 int     factorielle(n)
 {
     int result;
-
+    
     result = n;
     while (n > 1)
     {
@@ -43,7 +32,7 @@ char     **init_result(int n)
     int i;
     int j;
     int nb_comb;
-
+    
     i = 0;
     j = 0;
     nb_comb = factorielle(n);
@@ -58,7 +47,7 @@ char     **init_result(int n)
     {
         while (j < n)
         {
-            result[i][j] = 0 + 'A';
+            result[i][j] = 'A';
             j++;
         }
         j = 0;
@@ -67,52 +56,32 @@ char     **init_result(int n)
     return (result);
 }
 
-void    swap_b(int *x, int *y)
+void    swap(int *x, int *y)
 {
     int temp;
-
+    
     temp = *x;
     *x = *y;
     *y = temp;
 }
 
-void    init_heap(int n, int *c, int **result, int *numbers)
+void    init_heap(int n, int *c, char **result, int *numbers)
 {
     int i;
-
+    int j;
+    
     i = 0;
-    while (result[i])
+    while (i < n)
     {
-        j = 0;
-        if (result[i][0] == 0)
-            while (result[i][j])
-            {
-                result[i][j] = a[j];
-                j++;
-            }
+        c[i] = 0;
         i++;
     }
     i = 0;
     while (i < n)
     {
-        result[0][i] = numbers[i];
+        result[0][i] = (char)(numbers[i] + '@');
         i++;
     }
-}
-
-void    init_value(int *i, int *j, int *k)
-{
-    *i = 0;
-    *j = 1;
-    *k = -1;
-}
-
-void    update_value(int *j, int *k, int *c, int *i)
-{
-    *j += 1;
-    *k = -1;
-    c[*i]++;
-    *i = 0;
 }
 
 void    heap_permute(int n, int *numbers, char **result)
@@ -121,7 +90,7 @@ void    heap_permute(int n, int *numbers, char **result)
     int i;
     int j;
     int k;
-
+    
     c = malloc(sizeof(int) * n);
     i = 0;
     j = 1;
@@ -129,43 +98,38 @@ void    heap_permute(int n, int *numbers, char **result)
     init_heap(n, c, result, numbers);
     while (i < n)
     {
-        c[i] = 0;
-        i++;
-    }
-    while (k <  n)
-    {
-        result[j][k] = numbers[k];
-        k++;
-    }
-    j++;
-    k = 0;
-    i = 0;
-    while (i < n)
-    {
         if (c[i] < i)
         {
             if (i % 2 == 0)
-                swap_b(&numbers[0], &numbers[i]);
+                swap(&numbers[0], &numbers[i]);
             else
-                swap_b(&numbers[c[i]], &numbers[i]);
-            while (k++ < n)
-                result[j][k] = numbers[k] + 'A' - 1;
-            update_value(&j, &k, c, &i);
+                swap(&numbers[c[i]], &numbers[i]);
+            while (k <  n)
+            {
+                result[j][k] = (char)(numbers[k] + '@');
+                k++;
+            }
+            j++;
+            k = 0;
+            c[i]++;
+            i = 0;
         }
         else
-        {
-            c[i] = 0;
-            i++;
-        }
+            c[i++] = 0;
     }
 }
 
-char	**chercher_possibilites(int n)
+int     main(int argc, char **argv)
 {
     char **result;
     int *num;
     int i;
-
+    int j;
+    int n;
+    
+    if (argc != 2)
+        return (0);
+    n = atoi(argv[1]);
     i = n;
     result = init_result(n);
     num = malloc(sizeof(int) * n);
@@ -175,30 +139,19 @@ char	**chercher_possibilites(int n)
         i--;
     }
     heap_permute(n, num, result);
-<<<<<<< HEAD
-	result = trier_tab(result, 0, factorielle(n) - 1, n);
-	/*for (int z = 0; z < factorielle(n); z++)
-	{
-		for (int w = 0; w < n; w++)
-			printf("%c", result[z][w]);
-		printf(", ");
-	}*/
-    return (result);
-=======
-    /*i = 0;
+    i = 0;
     j = 0;
     while (i < factorielle(n))
-    {
-        while (j < n)
-        {
-            printf("%c", result[i][j]);
-            j++;
-        }
-        j = 0;
-        printf("\n");
-        i++;
-    }*/
+     {
+     while (j < n)
+     {
+     printf("%c", result[i][j]);
+     j++;
+     }
+     j = 0;
+     printf("\n");
+     i++;
+     }
     printf("\n\n%d Lignes affichees\n", i);
     return (0);
->>>>>>> 99ae7d811b280b4ffa87cd6c90511e60761d6ace
 }
