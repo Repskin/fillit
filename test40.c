@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/23 15:41:56 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/23 17:39:57 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 */
 #include <time.h>
 
-#include "test61.c"
-
 typedef struct		s_tetris
 {
 	int				**points;
@@ -30,6 +28,197 @@ typedef struct		s_tetris
 	int				y;
 	struct s_tetris	*next;
 }					t_tetris;
+
+void	swap(char **a, char **b)
+{
+	char *tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+int		get_poids(char *str, int len)
+{
+	char	c;
+	int		poids_lettre;
+	int		poids;
+	int		pos;
+	int		i;
+
+	poids = 0;
+	i = 0;
+	len--;
+	while (i < len)
+	{
+		poids_lettre = 0;
+		pos = len - i;
+		c = str[i];
+		while (c < ('A' + len))
+		{
+			poids_lettre = (poids_lettre * len) + 1;
+			c++;
+		}
+		poids += poids_lettre * pos;
+		i++;
+	}
+	return (poids);
+}
+
+char	**trier_tab(char **tab, int debut, int fin, int len)
+{
+	int gauche;
+	int droite;
+	char *pivot;
+
+	gauche = debut - 1;
+	droite = fin + 1;
+	pivot = tab[debut];
+	if (debut >= fin)
+		return (tab);
+	while (1)
+	{
+		droite--;
+		gauche++;
+		//while (get_poids(tab[droite], len) > get_poids(pivot, len))
+		while (get_poids(pivot, len) > get_poids(tab[droite], len))
+			droite--;
+		//while (get_poids(tab[gauche], len) < get_poids(pivot, len))
+		while (get_poids(pivot, len) < get_poids(tab[gauche], len))
+			gauche++;
+		if (gauche < droite)
+			swap(&tab[gauche], &tab[droite]);
+		else
+			break;
+	}
+	tab = trier_tab(tab, debut, droite, len);
+	tab = trier_tab(tab, droite + 1, fin, len);
+	return (tab);
+}
+
+int     factorielle(n)
+{
+    int result;
+
+    result = n;
+    while (n > 1)
+    {
+        n -= 1;
+        result = result * n;
+    }
+    return (result);
+}
+
+char     **init_result(int n)
+{
+    char **result;
+    int i;
+    int j;
+    int nb_comb;
+
+    i = 0;
+    j = 0;
+    nb_comb = factorielle(n);
+    result = malloc(sizeof(int*) * nb_comb);
+    while (i < nb_comb)
+    {
+        result[i] = malloc(sizeof(int) * n);
+        i++;
+    }
+    i = 0;
+    while (i < nb_comb)
+    {
+        while (j < n)
+        {
+            result[i][j] = 'A';
+            j++;
+        }
+        j = 0;
+        i++;
+    }
+    return (result);
+}
+
+void    swap_int(int *x, int *y)
+{
+    int temp;
+
+    temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void    init_heap(int n, int *c, char **result, int *numbers)
+{
+    int i;
+
+    i = 0;
+    while (i < n)
+    {
+        c[i] = 0;
+        i++;
+    }
+    i = 0;
+    while (i < n)
+    {
+        result[0][i] = (char)(numbers[i] + '@');
+        i++;
+    }
+}
+
+void    heap_permute(int n, int *numbers, char **result)
+{
+    int *c;
+    int i;
+    int j;
+    int k;
+
+    c = malloc(sizeof(int) * n);
+    i = 0;
+    j = 1;
+    k = 0;
+    init_heap(n, c, result, numbers);
+    while (i < n)
+    {
+        if (c[i] < i)
+        {
+            if (i % 2 == 0)
+                swap_int(&numbers[0], &numbers[i]);
+            else
+                swap_int(&numbers[c[i]], &numbers[i]);
+            while (k <  n)
+            {
+                result[j][k] = (char)(numbers[k] + '@');
+                k++;
+            }
+            j++;
+            k = 0;
+            c[i]++;
+            i = 0;
+        }
+        else
+            c[i++] = 0;
+    }
+}
+
+char	**chercher_possibilites(int n)
+{
+    char **result;
+    int *num;
+    int i;
+
+    i = n;
+    result = init_result(n);
+    num = malloc(sizeof(int) * n);
+    while (i > 0)
+    {
+        num[i-1] = i;
+        i--;
+    }
+    heap_permute(n, num, result);
+	result = trier_tab(result, 0, factorielle(n) - 1, n);
+    return (result);
+}
 
 void	ft_putchar(char c)
 {
