@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/23 17:39:57 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/25 16:32:01 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
-** JUSTE POUR VOIR LE Temps
-*/
-#include <time.h>
-
 typedef struct		s_tetris
 {
 	int				**points;
@@ -27,198 +22,8 @@ typedef struct		s_tetris
 	int				x;
 	int				y;
 	struct s_tetris	*next;
+	struct s_tetris	*prev;
 }					t_tetris;
-
-void	swap(char **a, char **b)
-{
-	char *tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-int		get_poids(char *str, int len)
-{
-	char	c;
-	int		poids_lettre;
-	int		poids;
-	int		pos;
-	int		i;
-
-	poids = 0;
-	i = 0;
-	len--;
-	while (i < len)
-	{
-		poids_lettre = 0;
-		pos = len - i;
-		c = str[i];
-		while (c < ('A' + len))
-		{
-			poids_lettre = (poids_lettre * len) + 1;
-			c++;
-		}
-		poids += poids_lettre * pos;
-		i++;
-	}
-	return (poids);
-}
-
-char	**trier_tab(char **tab, int debut, int fin, int len)
-{
-	int gauche;
-	int droite;
-	char *pivot;
-
-	gauche = debut - 1;
-	droite = fin + 1;
-	pivot = tab[debut];
-	if (debut >= fin)
-		return (tab);
-	while (1)
-	{
-		droite--;
-		gauche++;
-		//while (get_poids(tab[droite], len) > get_poids(pivot, len))
-		while (get_poids(pivot, len) > get_poids(tab[droite], len))
-			droite--;
-		//while (get_poids(tab[gauche], len) < get_poids(pivot, len))
-		while (get_poids(pivot, len) < get_poids(tab[gauche], len))
-			gauche++;
-		if (gauche < droite)
-			swap(&tab[gauche], &tab[droite]);
-		else
-			break;
-	}
-	tab = trier_tab(tab, debut, droite, len);
-	tab = trier_tab(tab, droite + 1, fin, len);
-	return (tab);
-}
-
-int     factorielle(n)
-{
-    int result;
-
-    result = n;
-    while (n > 1)
-    {
-        n -= 1;
-        result = result * n;
-    }
-    return (result);
-}
-
-char     **init_result(int n)
-{
-    char **result;
-    int i;
-    int j;
-    int nb_comb;
-
-    i = 0;
-    j = 0;
-    nb_comb = factorielle(n);
-    result = malloc(sizeof(int*) * nb_comb);
-    while (i < nb_comb)
-    {
-        result[i] = malloc(sizeof(int) * n);
-        i++;
-    }
-    i = 0;
-    while (i < nb_comb)
-    {
-        while (j < n)
-        {
-            result[i][j] = 'A';
-            j++;
-        }
-        j = 0;
-        i++;
-    }
-    return (result);
-}
-
-void    swap_int(int *x, int *y)
-{
-    int temp;
-
-    temp = *x;
-    *x = *y;
-    *y = temp;
-}
-
-void    init_heap(int n, int *c, char **result, int *numbers)
-{
-    int i;
-
-    i = 0;
-    while (i < n)
-    {
-        c[i] = 0;
-        i++;
-    }
-    i = 0;
-    while (i < n)
-    {
-        result[0][i] = (char)(numbers[i] + '@');
-        i++;
-    }
-}
-
-void    heap_permute(int n, int *numbers, char **result)
-{
-    int *c;
-    int i;
-    int j;
-    int k;
-
-    c = malloc(sizeof(int) * n);
-    i = 0;
-    j = 1;
-    k = 0;
-    init_heap(n, c, result, numbers);
-    while (i < n)
-    {
-        if (c[i] < i)
-        {
-            if (i % 2 == 0)
-                swap_int(&numbers[0], &numbers[i]);
-            else
-                swap_int(&numbers[c[i]], &numbers[i]);
-            while (k <  n)
-            {
-                result[j][k] = (char)(numbers[k] + '@');
-                k++;
-            }
-            j++;
-            k = 0;
-            c[i]++;
-            i = 0;
-        }
-        else
-            c[i++] = 0;
-    }
-}
-
-char	**chercher_possibilites(int n)
-{
-    char **result;
-    int *num;
-    int i;
-
-    i = n;
-    result = init_result(n);
-    num = malloc(sizeof(int) * n);
-    while (i > 0)
-    {
-        num[i-1] = i;
-        i--;
-    }
-    heap_permute(n, num, result);
-	result = trier_tab(result, 0, factorielle(n) - 1, n);
-    return (result);
-}
 
 void	ft_putchar(char c)
 {
@@ -523,11 +328,33 @@ void	put_zero_tetris(t_tetris *tetris)
 	tetris->y = 0;
 }
 
-int	placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
+void	effacer_dernier_tetris(char **tab_soluce, int index, char c)
 {
-	while (tetris != NULL && tetris->x < index && tetris->y < index)
+	int i;
+	int j;
+
+	i = 0;
+	while (i < index)
 	{
-		if (!tester_placer_piece(tab_soluce, tetris, index))
+		j = 0;
+		while (j < index)
+		{
+			if (tab_soluce[i][j] == c)
+				tab_soluce[i][j] = '.';
+			j++;
+		}
+		i++;
+	}
+}
+
+int		placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
+{
+	int		boolean;
+
+	boolean = 0;
+	if (tetris != NULL)
+	{
+		while (!tester_placer_piece(tab_soluce, tetris, index) && tetris->x < index && tetris->y < index)
 		{
 			if (tetris->y + 1 < index)
 				tetris->y++;
@@ -537,22 +364,44 @@ int	placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
 				tetris->y = 0;
 			}
 		}
-		else
+		if (tetris->x >= index || tetris->y >= index)
 		{
+			if (tetris->c == 'A')
+			{
+				put_zero_tetris(tetris);
+				return (0);
+			}
 			put_zero_tetris(tetris);
-			tetris = tetris->next;
+			tetris = tetris->prev;
+			if (tetris->y + 1 < index)
+				tetris->y++;
+			else
+			{
+				tetris->x++;
+				tetris->y = 0;
+			}
+			effacer_dernier_tetris(tab_soluce, index, tetris->c);
+			boolean = 1;
 		}
+		else if (tetris->next == NULL)
+			return (1);
+		if (boolean)
+		{
+			return (placer_pieces(tab_soluce, tetris, index));
+			boolean = 0;
+		}
+		else
+			return (placer_pieces(tab_soluce, tetris->next, index));
 	}
-	if (tetris == NULL)
-		return (1);
-	put_zero_tetris(tetris);
-	return (0);
+	return (1);
 }
 
-t_tetris	*set_pieces(char **tab_pieces, char c)
+t_tetris	*set_pieces(char **tab_pieces, char c, t_tetris *prev)
 {
 	t_tetris	*tetris;
+	t_tetris	*t_prev;
 
+	t_prev = prev;
 	if (tab_pieces[0][0] != '0')
 	{
 		tetris = malloc(sizeof(t_tetris));
@@ -560,7 +409,8 @@ t_tetris	*set_pieces(char **tab_pieces, char c)
 		tetris->x = 0;
 		tetris->y = 0;
 		tetris->points = trouver_points(tab_pieces[0], 0, 0);
-		tetris->next = set_pieces(++tab_pieces, ++c);
+		tetris->prev = t_prev;
+		tetris->next = set_pieces(++tab_pieces, ++c, tetris);
 	}
 	else
 		tetris = NULL;
@@ -571,79 +421,27 @@ int	t_soluce_min(int nb_tetriminos)
 {
 	int i;
 
-	i = 2;
+	i = 4;
 	while (i * i < nb_tetriminos * 4)
 		i++;
 	return (i);
 }
 
-t_tetris	*liste_possibilite(char *str_possibilites, t_tetris *tab_tetris_reel, int i)
-{
-	t_tetris	*tetris;
-
-	if (str_possibilites[i])
-	{
-		tetris = malloc(sizeof(t_tetris));
-		tetris = &tab_tetris_reel[(int)(str_possibilites[i] - 65)];
-		tetris->next = liste_possibilite(str_possibilites, tab_tetris_reel, ++i);
-	}
-	else
-		tetris = NULL;
-	return (tetris);
-}
-
-t_tetris	*get_tab_tetris(t_tetris tetris, int nb, char **tab_possibilites, int indice)
-{
-	int			i;
-	t_tetris	*pt_tetris;
-	t_tetris	*tab_tetris_reel;
-
-	i = 0;
-	pt_tetris = &tetris;
-	tab_tetris_reel = malloc(sizeof(t_tetris) * nb);
-	while (i < nb)
-	{
-		tab_tetris_reel[i] = *pt_tetris;
-		pt_tetris = pt_tetris->next;
-		i++;
-	}
-	return (liste_possibilite(tab_possibilites[indice], tab_tetris_reel, 0));
-}
-
-void	fillit(char **tab_pieces, int index, int nb)
+void	fillit(char **tab_pieces, int index)
 {
 	char			**tab_soluce;
-	unsigned char	boolean;
 	t_tetris		*tetris;
-	char			**tab_possibilites;
-	int				i;
 
-	boolean = 0;
-	tetris = set_pieces(tab_pieces, 'A');
-	tab_possibilites = chercher_possibilites(nb);
-	/*for (int z = 0; z < factorielle(nb); z++)
+	tetris = set_pieces(tab_pieces, 'A', NULL);
+	tab_soluce = initialiser(index, index, '.');
+	while (!placer_pieces(tab_soluce, tetris, index))
 	{
-		printf("%s\n", tab_possibilites[z]);
-	}
-	printf("\n");*/
-	while (!boolean)
-	{
-		i = 0;
-		while (i < factorielle(nb) && !boolean)
-		{
-			tab_soluce = initialiser(index, index, '.');
-			if (!placer_pieces(tab_soluce, get_tab_tetris(*tetris, nb, tab_possibilites, i), index))
-				i++;
-			else
-			{
-				//printf("%s\n\n", tab_possibilites[i]);
-				//printf("Solution :\n");
-				print_soluce(tab_soluce, index);
-				boolean = 1;
-			}
-		}
 		index++;
+		free(tab_soluce);
+		tab_soluce = initialiser(index, index, '.');
 	}
+	print_soluce(tab_soluce, index);
+	free(tab_soluce);
 }
 
 int	fonction2(char *argv)
@@ -676,13 +474,6 @@ int	fonction2(char *argv)
 
 int	main(int argc, char **argv)
 {
-	/*
-	** JUSTE POUR VOIR LE TEMPS
-	*/
-	long clk_tck = CLOCKS_PER_SEC;
-    clock_t t1, t2;
-	t1 = clock();
-
 	int	nb;
 
 	if (argc != 2)
@@ -691,15 +482,8 @@ int	main(int argc, char **argv)
 		return (2);
 	}
 	if ((nb = fonction2(argv[1])))
-		fillit(stock_piece(argv[1], nb, 0), t_soluce_min(nb), nb);
+		fillit(stock_piece(argv[1], nb, 0), t_soluce_min(nb));
 	else
 		ft_putstr("error\n");
-
-	/*
-	** JUSTE POUR VOIR LE Temps
-	*/
-	t2 = clock();
-	printf("\n");
-	printf("Temps : %lfs \n", (double)(t2-t1)/(double)clk_tck);
 	return (0);
 }
