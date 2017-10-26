@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/26 10:14:33 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/26 14:25:58 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,7 +362,7 @@ int		placer_pieces(char **tab, t_tetris *t, int i)
 {
 	while (!tester_placer_piece(tab, t, i) && t->x < i && t->y < i)
 		incremente(t, i);
-	if (t->x >= i || t->y >= i)
+	if (t->x >= i)
 	{
 		put_zero_tetris(t);
 		if (t->c == 'A')
@@ -424,7 +424,7 @@ void	fillit(char **tab_pieces, int index)
 	free(tab_soluce);
 }
 
-int	fonction2(char *argv)
+int	reader(char *argv)
 {
 	int		fd;
 	int		size_read;
@@ -461,7 +461,7 @@ int	main(int argc, char **argv)
 		ft_putstr("usage: ./fillit <file>\n");
 		return (2);
 	}
-	if ((nb = fonction2(argv[1])))
+	if ((nb = reader(argv[1])))
 		fillit(stock_piece(argv[1], nb, 0), t_soluce_min(nb));
 	else
 		ft_putstr("error\n");
