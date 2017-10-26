@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/25 16:32:01 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/25 17:22:50 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,6 +347,17 @@ void	effacer_dernier_tetris(char **tab_soluce, int index, char c)
 	}
 }
 
+void	incremente(t_tetris *tetris, int index)
+{
+	if (tetris->y + 1 < index)
+		tetris->y++;
+	else
+	{
+		tetris->x++;
+		tetris->y = 0;
+	}
+}
+
 int		placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
 {
 	int		boolean;
@@ -355,31 +366,14 @@ int		placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
 	if (tetris != NULL)
 	{
 		while (!tester_placer_piece(tab_soluce, tetris, index) && tetris->x < index && tetris->y < index)
-		{
-			if (tetris->y + 1 < index)
-				tetris->y++;
-			else
-			{
-				tetris->x++;
-				tetris->y = 0;
-			}
-		}
+			incremente(tetris, index);
 		if (tetris->x >= index || tetris->y >= index)
 		{
-			if (tetris->c == 'A')
-			{
-				put_zero_tetris(tetris);
-				return (0);
-			}
 			put_zero_tetris(tetris);
+			if (tetris->c == 'A')
+				return (0);
 			tetris = tetris->prev;
-			if (tetris->y + 1 < index)
-				tetris->y++;
-			else
-			{
-				tetris->x++;
-				tetris->y = 0;
-			}
+			incremente(tetris, index);
 			effacer_dernier_tetris(tab_soluce, index, tetris->c);
 			boolean = 1;
 		}
@@ -437,7 +431,6 @@ void	fillit(char **tab_pieces, int index)
 	while (!placer_pieces(tab_soluce, tetris, index))
 	{
 		index++;
-		free(tab_soluce);
 		tab_soluce = initialiser(index, index, '.');
 	}
 	print_soluce(tab_soluce, index);
@@ -459,7 +452,7 @@ int	fonction2(char *argv)
 	while ((size_read = read(fd, buf, 21)) > 0)
 	{
 		size_read_temp = size_read;
-		if ((check_1(buf, size_read)) || (check_2(buf)) || nb_tetriminos > 26)
+		if ((check_1(buf, size_read)) || (check_2(buf)))
 		{
 			close(fd);
 			return (0);
