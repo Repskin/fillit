@@ -6,11 +6,18 @@
 /*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:40:00 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/26 15:52:34 by tburnouf         ###   ########.fr       */
+/*   Updated: 2017/10/26 16:00:03 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
+
+/*
+** index & index2	= size of the array
+** c				= char of the piece
+**
+** Initialize the map with a char
+*/
 
 char	**initialize(int index, int index2, char c)
 {
@@ -38,6 +45,12 @@ char	**initialize(int index, int index2, char c)
 	}
 	return (y);
 }
+
+/*
+** No params
+**
+** Initialize a map 4x4
+*/
 
 int		**initialize_array_piece(void)
 {
