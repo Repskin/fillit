@@ -38,21 +38,21 @@ int		**format_point_piece(int **points_piece)
 	return (points_piece);
 }
 
-int		test_point(char **array_soluce, t_tetris *t, int i, int size_result)
+int		test_point(char **ar_result, t_tetris *t, int i, int sz_result)
 {
 	int		x;
 	int		y;
 	
 	x = t->x + t->points[i][0];
 	y = t->y + t->points[i][1];
-	if (!(x < size_result) || !(y < size_result) || array_soluce[x][y] != '.')
+	if (!(x < sz_result) || !(y < sz_result) || ar_result[x][y] != '.')
 	{
 		return (0);
 	}
 	return (1);
 }
 
-int		place_point(char **array_soluce, t_tetris *t, int i, int size_result)
+int		place_point(char **ar_resut, t_tetris *t, int i, int sz_result)
 {
 	int		x;
 	int		y;
@@ -61,9 +61,9 @@ int		place_point(char **array_soluce, t_tetris *t, int i, int size_result)
 	x = t->x + t->points[i][0];
 	y = t->y + t->points[i][1];
 	c = t->c;
-	if (!(x < size_result) || !(y < size_result) || array_soluce[x][y] != '.')
+	if (!(x < sz_result) || !(y < sz_result) || ar_resut[x][y] != '.')
 		return (0);
-	array_soluce[x][y] = c;
+	ar_resut[x][y] = c;
 	return (1);
 }
 

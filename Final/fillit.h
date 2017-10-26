@@ -39,8 +39,8 @@ int					**initialize_array_piece(void);
 */
 int					place_piece(char **array, t_tetris *t, int i);
 t_tetris			*set_pieces(char **array_pieces, char c, t_tetris *prev);
-int					test_place_piece(char **array_soluce, t_tetris *tetris, int size_result);
-void				delete_last_piece(char **array_soluce, int index, char c);
+int					test_place_piece(char **ar_result, t_tetris *tetris, int sz_result);
+void				delete_last_piece(char **ar_result, int index, char c);
 void				fillit(char **array_pieces, int index);
 
 /*
@@ -56,8 +56,8 @@ void				print_result(char **array_soluce, int index);
 ** File : pieces.c
 */
 int					**format_point_piece(int **points_piece);
-int					test_point(char **array_soluce, t_tetris *t, int i, int size_result);
-int					place_point(char **array_soluce, t_tetris *t, int i, int size_result);
+int					test_point(char **ar_result, t_tetris *t, int i, int sz_result);
+int					place_point(char **ar_result, t_tetris *t, int i, int sz_result);
 int					**find_points(char *piece, int j, int k);
 void				incrementation(t_tetris *tetris, int index);
 
