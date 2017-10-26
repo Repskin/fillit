@@ -39,7 +39,7 @@ int					**initialize_array_piece(void);
 */
 int					place_piece(char **array, t_tetris *t, int i);
 t_tetris			*set_pieces(char **array_pieces, char c, t_tetris *prev);
-int					test_place_piece(char **a_result, t_tetris *tetris, int size);
+int					test_place_piece(char **a_result, t_tetris *t, int size);
 void				delete_last_piece(char **a_result, int index, char c);
 void				fillit(char **array_pieces, int index);
 

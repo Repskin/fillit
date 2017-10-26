@@ -53,21 +53,21 @@ t_tetris	*set_pieces(char **array_pieces, char c, t_tetris *prev)
 	return (tetris);
 }
 
-int			test_place_piece(char **a_result, t_tetris *tetris, int size)
+int			test_place_piece(char **a_result, t_tetris *t, int size)
 {
 	int i;
 	
 	i = 0;
 	while (i < 4)
 	{
-		if (!test_point(a_result, tetris, i, size))
+		if (!test_point(a_result, t, i, size))
 			return (0);
 		i++;
 	}
 	i = 0;
 	while (i < 4)
 	{
-		if (!place_point(a_result, tetris, i, size))
+		if (!place_point(a_result, t, i, size))
 			return (0);
 		i++;
 	}
