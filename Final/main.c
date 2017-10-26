@@ -6,7 +6,7 @@
 /*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:39:47 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/26 14:39:48 by tburnouf         ###   ########.fr       */
+/*   Updated: 2017/10/26 15:53:57 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main(int argc, char **argv)
 {
 	int	nb;
-	
+
 	if (argc != 2)
 	{
 		ft_putstr("usage: ./fillit <file>\n");

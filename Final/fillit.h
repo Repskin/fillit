@@ -6,7 +6,7 @@
 /*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:46:07 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/26 14:46:08 by tburnouf         ###   ########.fr       */
+/*   Updated: 2017/10/26 15:55:29 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct		s_tetris
 }					t_tetris;
 
 /*
-** File : array.c 
+** File : array.c
 */
 char				**initialize(int index, int index2, char c);
 int					**initialize_array_piece(void);

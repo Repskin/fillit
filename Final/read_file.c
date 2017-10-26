@@ -6,7 +6,7 @@
 /*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:39:52 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/26 14:39:53 by tburnouf         ###   ########.fr       */
+/*   Updated: 2017/10/26 15:56:31 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		grid_is_good(char *str, int size)
 {
 	int i;
 	int p;
-	
+
 	i = 0;
 	p = 0;
 	if (size == 0)
@@ -44,7 +44,7 @@ int		shape_is_good(char *str)
 {
 	int i;
 	int connection;
-	
+
 	i = 0;
 	connection = 0;
 	while (str[i])
@@ -74,7 +74,7 @@ char	**stock_piece(char *str, int nb_tetriminos, int fd)
 	int		i;
 	int		j;
 	int		pos_tab;
-	
+
 	fd = open(str, O_RDONLY);
 	i = 0;
 	pos_tab = 0;
@@ -101,7 +101,7 @@ int		reader(char *argv)
 	char	buf[22];
 	int		nb_tetriminos;
 	int		size_read_temp;
-	
+
 	size_read = 1;
 	nb_tetriminos = 0;
 	if ((fd = open(argv, O_RDONLY)) < 0)

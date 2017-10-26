@@ -6,7 +6,7 @@
 /*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:40:00 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/26 14:40:00 by tburnouf         ###   ########.fr       */
+/*   Updated: 2017/10/26 15:52:34 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	**initialize(int index, int index2, char c)
 	int		i;
 	int		j;
 	char	**y;
-	
+
 	i = 0;
 	y = malloc(sizeof(char *) * index);
 	while (i < index)
@@ -43,7 +43,7 @@ int		**initialize_array_piece(void)
 {
 	int i;
 	int **y;
-	
+
 	i = 0;
 	y = malloc(sizeof(int *) * 4);
 	while (i < 4)

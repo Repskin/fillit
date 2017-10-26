@@ -6,7 +6,7 @@
 /*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:39:41 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/26 14:39:43 by tburnouf         ###   ########.fr       */
+/*   Updated: 2017/10/26 15:55:12 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_tetris	*set_pieces(char **array_pieces, char c, t_tetris *prev)
 {
 	t_tetris	*tetris;
 	t_tetris	*t_prev;
-	
+
 	t_prev = prev;
 	if (array_pieces[0][0] != '0')
 	{
@@ -56,7 +56,7 @@ t_tetris	*set_pieces(char **array_pieces, char c, t_tetris *prev)
 int			test_place_piece(char **a_result, t_tetris *t, int size)
 {
 	int i;
-	
+
 	i = 0;
 	while (i < 4)
 	{
@@ -78,7 +78,7 @@ void		delete_last_piece(char **a_result, int index, char c)
 {
 	int i;
 	int j;
-	
+
 	i = 0;
 	while (i < index)
 	{
@@ -97,7 +97,7 @@ void		fillit(char **array_pieces, int index)
 {
 	char			**array_result;
 	t_tetris		*tetris;
-	
+
 	tetris = set_pieces(array_pieces, 'A', NULL);
 	array_result = initialize(index, index, '.');
 	while (!place_piece(array_pieces, tetris, index))

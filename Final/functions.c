@@ -6,7 +6,7 @@
 /*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:40:06 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/26 14:40:06 by tburnouf         ###   ########.fr       */
+/*   Updated: 2017/10/26 15:53:39 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_putchar(char c)
 void	ft_putstr(char *str)
 {
 	int i;
-	
+
 	i = 0;
 	while (str[i])
 	{
@@ -32,7 +32,7 @@ void	ft_putstr(char *str)
 int		t_result_min(int nb_tetriminos)
 {
 	int i;
-	
+
 	i = 2;
 	while (i * i < nb_tetriminos * 4)
 		i++;
@@ -42,7 +42,7 @@ int		t_result_min(int nb_tetriminos)
 int		**reduce_piece(int **points_piece, int nb, int reduce)
 {
 	int i;
-	
+
 	i = 0;
 	while (i < 4)
 	{
@@ -56,7 +56,7 @@ void	print_result(char **array_soluce, int index)
 {
 	int i;
 	int j;
-	
+
 	i = 0;
 	j = 0;
 	while (i < index)

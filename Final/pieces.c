@@ -6,7 +6,7 @@
 /*   By: tburnouf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:40:12 by tburnouf          #+#    #+#             */
-/*   Updated: 2017/10/26 14:40:13 by tburnouf         ###   ########.fr       */
+/*   Updated: 2017/10/26 15:55:58 by tburnouf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		**format_point_piece(int **points_piece)
 {
 	int i;
 	int nb;
-	
+
 	i = 0;
 	nb = 4;
 	while (i < 4)
@@ -42,7 +42,7 @@ int		test_point(char **a_result, t_tetris *t, int i, int size)
 {
 	int		x;
 	int		y;
-	
+
 	x = t->x + t->points[i][0];
 	y = t->y + t->points[i][1];
 	if (!(x < size) || !(y < size) || a_result[x][y] != '.')
@@ -57,7 +57,7 @@ int		place_point(char **a_result, t_tetris *t, int i, int size)
 	int		x;
 	int		y;
 	char	c;
-	
+
 	x = t->x + t->points[i][0];
 	y = t->y + t->points[i][1];
 	c = t->c;
@@ -72,7 +72,7 @@ int		**find_points(char *piece, int j, int k)
 	int i;
 	int nb_diese;
 	int **points_piece;
-	
+
 	i = -1;
 	nb_diese = 0;
 	points_piece = initialize_array_piece();
