@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/25 17:22:50 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/26 10:14:33 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,36 +358,23 @@ void	incremente(t_tetris *tetris, int index)
 	}
 }
 
-int		placer_pieces(char **tab_soluce, t_tetris *tetris, int index)
+int		placer_pieces(char **tab, t_tetris *t, int i)
 {
-	int		boolean;
-
-	boolean = 0;
-	if (tetris != NULL)
+	while (!tester_placer_piece(tab, t, i) && t->x < i && t->y < i)
+		incremente(t, i);
+	if (t->x >= i || t->y >= i)
 	{
-		while (!tester_placer_piece(tab_soluce, tetris, index) && tetris->x < index && tetris->y < index)
-			incremente(tetris, index);
-		if (tetris->x >= index || tetris->y >= index)
-		{
-			put_zero_tetris(tetris);
-			if (tetris->c == 'A')
-				return (0);
-			tetris = tetris->prev;
-			incremente(tetris, index);
-			effacer_dernier_tetris(tab_soluce, index, tetris->c);
-			boolean = 1;
-		}
-		else if (tetris->next == NULL)
-			return (1);
-		if (boolean)
-		{
-			return (placer_pieces(tab_soluce, tetris, index));
-			boolean = 0;
-		}
-		else
-			return (placer_pieces(tab_soluce, tetris->next, index));
+		put_zero_tetris(t);
+		if (t->c == 'A')
+			return (0);
+		t = t->prev;
+		incremente(t, i);
+		effacer_dernier_tetris(tab, i, t->c);
+		return (placer_pieces(tab, t, i));
 	}
-	return (1);
+	else if (t->next == NULL)
+		return (1);
+	return (placer_pieces(tab, t->next, i));
 }
 
 t_tetris	*set_pieces(char **tab_pieces, char c, t_tetris *prev)
@@ -415,7 +402,7 @@ int	t_soluce_min(int nb_tetriminos)
 {
 	int i;
 
-	i = 4;
+	i = 2;
 	while (i * i < nb_tetriminos * 4)
 		i++;
 	return (i);
