@@ -12,7 +12,7 @@
 
 #include "fillit.h"
 
-int	grid_is_good(char *str, int size)
+int		grid_is_good(char *str, int size)
 {
 	int i;
 	int p;
@@ -40,7 +40,7 @@ int	grid_is_good(char *str, int size)
 	return (0);
 }
 
-int	shape_is_good(char *str)
+int		shape_is_good(char *str)
 {
 	int i;
 	int connection;
@@ -94,7 +94,7 @@ char	**stock_piece(char *str, int nb_tetriminos, int fd)
 	return (tab_pieces);
 }
 
-int	reader(char *argv)
+int		reader(char *argv)
 {
 	int		fd;
 	int		size_read;

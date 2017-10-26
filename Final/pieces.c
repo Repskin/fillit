@@ -12,7 +12,7 @@
 
 #include "fillit.h"
 
-int	**format_point_piece(int **points_piece)
+int		**format_point_piece(int **points_piece)
 {
 	int i;
 	int nb;
@@ -67,7 +67,7 @@ int		place_point(char **array_soluce, t_tetris *t, int i, int size_result)
 	return (1);
 }
 
-int	**find_points(char *piece, int j, int k)
+int		**find_points(char *piece, int j, int k)
 {
 	int i;
 	int nb_diese;

@@ -12,7 +12,7 @@
 
 #include "fillit.h"
 
-int		place_piece(char **array, t_tetris *t, int i)
+int			place_piece(char **array, t_tetris *t, int i)
 {
 	while (!test_place_piece(array, t, i) && t->x < i && t->y < i)
 		incrementation(t, i);
@@ -53,7 +53,7 @@ t_tetris	*set_pieces(char **array_pieces, char c, t_tetris *prev)
 	return (tetris);
 }
 
-int	test_place_piece(char **array_soluce, t_tetris *tetris, int size_result)
+int			test_place_piece(char **array_soluce, t_tetris *tetris, int size_result)
 {
 	int i;
 	
@@ -74,7 +74,7 @@ int	test_place_piece(char **array_soluce, t_tetris *tetris, int size_result)
 	return (1);
 }
 
-void	delete_last_piece(char **array_soluce, int index, char c)
+void		delete_last_piece(char **array_soluce, int index, char c)
 {
 	int i;
 	int j;
@@ -93,7 +93,7 @@ void	delete_last_piece(char **array_soluce, int index, char c)
 	}
 }
 
-void	fillit(char **array_pieces, int index)
+void		fillit(char **array_pieces, int index)
 {
 	char			**array_result;
 	t_tetris		*tetris;

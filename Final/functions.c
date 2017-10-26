@@ -29,7 +29,7 @@ void	ft_putstr(char *str)
 	}
 }
 
-int	t_result_min(int nb_tetriminos)
+int		t_result_min(int nb_tetriminos)
 {
 	int i;
 	
@@ -39,7 +39,7 @@ int	t_result_min(int nb_tetriminos)
 	return (i);
 }
 
-int	**reduce_piece(int **points_piece, int nb, int reduce)
+int		**reduce_piece(int **points_piece, int nb, int reduce)
 {
 	int i;
 	
