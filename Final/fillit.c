@@ -53,28 +53,28 @@ t_tetris	*set_pieces(char **array_pieces, char c, t_tetris *prev)
 	return (tetris);
 }
 
-int			test_place_piece(char **ar_result, t_tetris *tetris, int sz_result)
+int			test_place_piece(char **a_result, t_tetris *tetris, int size)
 {
 	int i;
 	
 	i = 0;
 	while (i < 4)
 	{
-		if (!test_point(ar_result, tetris, i, sz_result))
+		if (!test_point(a_result, tetris, i, size))
 			return (0);
 		i++;
 	}
 	i = 0;
 	while (i < 4)
 	{
-		if (!place_point(ar_result, tetris, i, sz_result))
+		if (!place_point(a_result, tetris, i, size))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void		delete_last_piece(char **ar_result, int index, char c)
+void		delete_last_piece(char **a_result, int index, char c)
 {
 	int i;
 	int j;
@@ -85,8 +85,8 @@ void		delete_last_piece(char **ar_result, int index, char c)
 		j = 0;
 		while (j < index)
 		{
-			if (ar_result[i][j] == c)
-				ar_result[i][j] = '.';
+			if (a_result[i][j] == c)
+				a_result[i][j] = '.';
 			j++;
 		}
 		i++;
