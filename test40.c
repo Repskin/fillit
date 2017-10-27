@@ -6,7 +6,7 @@
 /*   By: afelpin <afelpin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 15:24:01 by afelpin           #+#    #+#             */
-/*   Updated: 2017/10/26 14:25:58 by afelpin          ###   ########.fr       */
+/*   Updated: 2017/10/26 15:53:20 by afelpin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,25 +122,6 @@ char	**initialiser(int index, int index2, char c)
 		i++;
 	}
 	return (y);
-}
-
-char	**reinitialiser(char **tab, int index, int index2, char c)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (i < index)
-	{
-		j = 0;
-		while (j < index2)
-		{
-			tab[i][j] = c;
-			j++;
-		}
-		i++;
-	}
-	return (tab);
 }
 
 int	**initialiser_tab_point_piece(void)
@@ -322,12 +303,6 @@ int	tester_placer_piece(char **tab_soluce, t_tetris *tetris, int taille_soluce)
 	return (1);
 }
 
-void	put_zero_tetris(t_tetris *tetris)
-{
-	tetris->x = 0;
-	tetris->y = 0;
-}
-
 void	effacer_dernier_tetris(char **tab_soluce, int index, char c)
 {
 	int i;
@@ -364,7 +339,8 @@ int		placer_pieces(char **tab, t_tetris *t, int i)
 		incremente(t, i);
 	if (t->x >= i)
 	{
-		put_zero_tetris(t);
+		t->x = 0;
+		t->y = 0;
 		if (t->c == 'A')
 			return (0);
 		t = t->prev;
